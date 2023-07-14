@@ -1,0 +1,99 @@
+models:
+  # Usuarios
+  Alumno:
+    nombre: string:100
+    apellido: string:100
+    relationships:
+      morphMany: Parent
+
+  Docente:
+    nombre: string:100
+    apellido: string:100
+    relationships:
+      morphMany: Parent
+
+  Parent:
+    user_id: id foreign:users
+    timestamps: false
+    relationships:
+      morphTo: Parentable
+
+  # Catalogos
+  Estado:
+    nombre: string:25
+    codigo: string:5
+    timestamps: false
+
+  Plan:
+    nombre: string:100
+    codigo: string:5
+    timestamps: false
+    softDeletes: true
+
+  Carrera:
+    nombre: string:100
+    codigo: string:5
+    timestamps: false
+    softDeletes: true
+
+  Materia:
+    nombre: string:100
+    codigo: string:5
+    timestamps: false
+    softDeletes: true
+
+  Ciclo:
+    nombre: string:100
+    codigo: string:5
+
+  Horario:
+    nombre: string:100
+    codigo: string:5
+    timestamps: false
+
+  # Matenimientos
+  Pensum:
+    plan_id: id
+    carrera_id: id
+    timestamps: false
+    relationships:
+      hasMany: PensumDetalle, AlumnoPensum
+
+  AlumnoPensum:
+    alumno_id: integer
+    pensum_id: integer
+    timestamps: false
+    active: boolean
+    relationships:
+      hasMany: Pensum, Alumno
+
+  PensumDetalle:
+    pensum_id: id
+    materia_id: id
+    timestamps: false
+
+  CargaAcademica:
+    docente_id: id
+    materia_id: id
+    horario_id: id
+    ciclo_id: id
+    timestamps: true
+
+  Asesoria:
+    alumno_id: id
+    ciclo_id: id
+    estado_id: id
+    timestamps: true
+
+  AsesoriaDetalle:
+    asesoria_id: id
+    carga_academica_id: id
+    estado_id: id
+    timestamps: false
+
+  Nota:
+    asesoria_detalle_id: id
+    nota: float
+    timestamps: true
+
+seeders: Alumno, Docente, Estado, Plan, Carrera, Materia, Ciclo, Horario, Pensum, CargaAcademica

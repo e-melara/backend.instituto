@@ -1,0 +1,77 @@
+created:
+    - database/factories/AlumnoFactory.php
+    - database/factories/DocenteFactory.php
+    - database/factories/ParentFactory.php
+    - database/factories/EstadoFactory.php
+    - database/factories/PlanFactory.php
+    - database/factories/CarreraFactory.php
+    - database/factories/MateriaFactory.php
+    - database/factories/CicloFactory.php
+    - database/factories/HorarioFactory.php
+    - database/factories/PensumFactory.php
+    - database/factories/AlumnoPensumFactory.php
+    - database/factories/PensumDetalleFactory.php
+    - database/factories/CargaAcademicaFactory.php
+    - database/factories/AsesoriaFactory.php
+    - database/factories/AsesoriaDetalleFactory.php
+    - database/factories/NotaFactory.php
+    - database/migrations/2023_07_14_013619_create_alumnos_table.php
+    - database/migrations/2023_07_14_013620_create_docentes_table.php
+    - database/migrations/2023_07_14_013621_create_parents_table.php
+    - database/migrations/2023_07_14_013622_create_estados_table.php
+    - database/migrations/2023_07_14_013623_create_plans_table.php
+    - database/migrations/2023_07_14_013624_create_carreras_table.php
+    - database/migrations/2023_07_14_013625_create_materias_table.php
+    - database/migrations/2023_07_14_013626_create_ciclos_table.php
+    - database/migrations/2023_07_14_013627_create_horarios_table.php
+    - database/migrations/2023_07_14_013628_create_pensums_table.php
+    - database/migrations/2023_07_14_013629_create_alumno_pensums_table.php
+    - database/migrations/2023_07_14_013630_create_pensum_detalles_table.php
+    - database/migrations/2023_07_14_013631_create_carga_academicas_table.php
+    - database/migrations/2023_07_14_013632_create_asesorias_table.php
+    - database/migrations/2023_07_14_013633_create_asesoria_detalles_table.php
+    - database/migrations/2023_07_14_013634_create_notas_table.php
+    - app/Models/Alumno.php
+    - app/Models/Docente.php
+    - app/Models/Parent.php
+    - app/Models/Estado.php
+    - app/Models/Plan.php
+    - app/Models/Carrera.php
+    - app/Models/Materia.php
+    - app/Models/Ciclo.php
+    - app/Models/Horario.php
+    - app/Models/Pensum.php
+    - app/Models/AlumnoPensum.php
+    - app/Models/PensumDetalle.php
+    - app/Models/CargaAcademica.php
+    - app/Models/Asesoria.php
+    - app/Models/AsesoriaDetalle.php
+    - app/Models/Nota.php
+    - database/seeders/AlumnoSeeder.php
+    - database/seeders/DocenteSeeder.php
+    - database/seeders/EstadoSeeder.php
+    - database/seeders/PlanSeeder.php
+    - database/seeders/CarreraSeeder.php
+    - database/seeders/MateriaSeeder.php
+    - database/seeders/CicloSeeder.php
+    - database/seeders/HorarioSeeder.php
+    - database/seeders/PensumSeeder.php
+    - database/seeders/CargaAcademicaSeeder.php
+models:
+    User: {  }
+    Alumno: { nombre: 'string:100', apellido: 'string:100', relationships: { morphMany: Parent } }
+    Docente: { nombre: 'string:100', apellido: 'string:100', relationships: { morphMany: Parent } }
+    Parent: { user_id: 'id foreign:users', timestamps: false, relationships: { morphTo: Parentable } }
+    Estado: { nombre: 'string:25', codigo: 'string:5', timestamps: false }
+    Plan: { nombre: 'string:100', codigo: 'string:5', timestamps: false, softdeletes: softDeletes }
+    Carrera: { nombre: 'string:100', codigo: 'string:5', timestamps: false, softdeletes: softDeletes }
+    Materia: { nombre: 'string:100', codigo: 'string:5', timestamps: false, softdeletes: softDeletes }
+    Ciclo: { nombre: 'string:100', codigo: 'string:5' }
+    Horario: { nombre: 'string:100', codigo: 'string:5', timestamps: false }
+    Pensum: { plan_id: id, carrera_id: id, timestamps: false, relationships: { hasMany: 'PensumDetalle, AlumnoPensum' } }
+    AlumnoPensum: { alumno_id: integer, pensum_id: integer, timestamps: false, active: boolean, relationships: { hasMany: 'Pensum, Alumno' } }
+    PensumDetalle: { pensum_id: id, materia_id: id, timestamps: false }
+    CargaAcademica: { docente_id: id, materia_id: id, horario_id: id, ciclo_id: id, timestamps: timestamps }
+    Asesoria: { alumno_id: id, ciclo_id: id, estado_id: id, timestamps: timestamps }
+    AsesoriaDetalle: { asesoria_id: id, carga_academica_id: id, estado_id: id, timestamps: false }
+    Nota: { asesoria_detalle_id: id, nota: float, timestamps: timestamps }
