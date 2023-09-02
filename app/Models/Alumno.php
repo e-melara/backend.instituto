@@ -16,8 +16,8 @@ class Alumno extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
-        'apellido',
+        'nombres',
+        'apellidos',
     ];
 
     /**
@@ -29,8 +29,8 @@ class Alumno extends Model
         'id' => 'integer',
     ];
 
-    public function parents(): MorphMany
+    public function userPersonas(): MorphMany
     {
-        return $this->morphMany(Parent::class, 'parentable');
+        return $this->morphMany(UserPersona::class, 'userpersonaable');
     }
 }

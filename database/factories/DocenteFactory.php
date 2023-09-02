@@ -21,8 +21,8 @@ class DocenteFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->regexify('[A-Za-z0-9]{100}'),
-            'apellido' => $this->faker->regexify('[A-Za-z0-9]{100}'),
+            'nombres' => $this->faker->regexify('[A-Za-z0-9]{50}'),
+            'apellidos' => $this->faker->regexify('[A-Za-z0-9]{50}'),
         ];
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Carrera;
 use App\Models\Pensum;
-use App\Models\Plan;
 
 class PensumFactory extends Factory
 {
@@ -23,8 +22,9 @@ class PensumFactory extends Factory
     public function definition(): array
     {
         return [
-            'plan_id' => Plan::factory(),
+            'plan' => $this->faker->regexify('[A-Za-z0-9]{10}'),
             'carrera_id' => Carrera::factory(),
+            'nombre' => $this->faker->regexify('[A-Za-z0-9]{50}'),
         ];
     }
 }

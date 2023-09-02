@@ -1,34 +1,28 @@
 models:
   # Usuarios
   Alumno:
-    nombre: string:100
-    apellido: string:100
+    nombres: string:50
+    apellidos: string:50
     relationships:
-      morphMany: Parent
+      morphMany: UserPersona
 
   Docente:
-    nombre: string:100
-    apellido: string:100
+    nombres: string:50
+    apellidos: string:50
     relationships:
-      morphMany: Parent
+      morphMany: UserPersona
 
-  Parent:
+  UserPersona:
     user_id: id foreign:users
     timestamps: false
     relationships:
-      morphTo: Parentable
+      morphTo: Usertable
 
   # Catalogos
   Estado:
     nombre: string:25
     codigo: string:5
     timestamps: false
-
-  Plan:
-    nombre: string:100
-    codigo: string:5
-    timestamps: false
-    softDeletes: true
 
   Carrera:
     nombre: string:100
@@ -53,9 +47,11 @@ models:
 
   # Matenimientos
   Pensum:
-    plan_id: id
+    plan: string:10
     carrera_id: id
+    nombre: string:50
     timestamps: false
+    softDeletes: true
     relationships:
       hasMany: PensumDetalle, AlumnoPensum
 

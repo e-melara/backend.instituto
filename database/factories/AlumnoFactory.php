@@ -21,8 +21,8 @@ class AlumnoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->name(),
-            'apellido' => $this->faker->lastName(),
+            'nombres' => $this->faker->regexify('[A-Za-z0-9]{50}'),
+            'apellidos' => $this->faker->regexify('[A-Za-z0-9]{50}'),
         ];
     }
 }

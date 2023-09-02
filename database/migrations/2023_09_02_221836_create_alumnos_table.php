@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-
-        Schema::create('pensums', function (Blueprint $table) {
+        Schema::create('alumnos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('plan_id');
-            $table->unsignedBigInteger('carrera_id');
+            $table->string('nombres', 50);
+            $table->string('apellidos', 50);
+            $table->timestamps();
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pensums');
+        Schema::dropIfExists('alumnos');
     }
 };

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('pensums', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 100);
-            $table->string('codigo', 5);
+            $table->string('plan', 10);
+            $table->unsignedBigInteger('carrera_id');
+            $table->string('nombre', 50);
             $table->softDeletes();
         });
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('pensums');
     }
 };

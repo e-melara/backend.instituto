@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('parents', function (Blueprint $table) {
+        Schema::create('user_personas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->unsignedBigInteger('parentable_id');
-            $table->string('parentable_type');
+            $table->unsignedBigInteger('usertable_id');
+            $table->string('usertable_type');
         });
 
         Schema::enableForeignKeyConstraints();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parents');
+        Schema::dropIfExists('user_personas');
     }
 };
