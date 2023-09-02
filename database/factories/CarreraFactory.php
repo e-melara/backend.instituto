@@ -21,7 +21,7 @@ class CarreraFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->regexify('[A-Za-z0-9]{100}'),
+            'nombre' => $this->faker->jobTitle('[A-Za-z0-9]{100}'),
             'codigo' => $this->faker->regexify('[A-Za-z0-9]{5}'),
         ];
     }

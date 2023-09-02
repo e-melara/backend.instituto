@@ -21,7 +21,7 @@ class CicloFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->regexify('[A-Za-z0-9]{100}'),
+            'nombre' => $this->faker->year() . ' - ' . $this->faker->randomDigit(),
             'codigo' => $this->faker->regexify('[A-Za-z0-9]{5}'),
         ];
     }
