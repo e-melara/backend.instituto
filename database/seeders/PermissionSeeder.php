@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -15,31 +16,25 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         // create permissions
-        Permission::create(['name' => 'admin.article.view']);
-        Permission::create(['name' => 'admin.article.create']);
-        Permission::create(['name' => 'admin.article.update']);
-        Permission::create(['name' => 'admin.article.delete']);
-        Permission::create(['name' => 'admin.product.view']);
-        Permission::create(['name' => 'admin.product.create']);
+        Permission::create(['name' => 'student.notes.view']);
+        Permission::create(['name' => 'student.pensum.view']);
+        Permission::create(['name' => 'student.pensum.create']);
+        Permission::create(['name' => 'student.user.config']);
+        Permission::create(['name' => 'student.perfil.view']);
 
         // create roles and assign existing permissions
-        $role1 = Role::create(['name' => 'Administrador']);
-        $role1->givePermissionTo('admin.product.view');
-        $role1->givePermissionTo('admin.product.create');
+        $role = Role::create(['name' => 'Student']);
+        $role->givePermissionTo('student.notes.view');
+        $role->givePermissionTo('student.pensum.view');
+        $role->givePermissionTo('student.pensum.create');
+        $role->givePermissionTo('student.user.config');
+        $role->givePermissionTo('student.perfil.view');
 
-        $role2 = Role::create(['name' => 'visor']);
-        $role2->givePermissionTo('admin.product.view');
-        $role2->givePermissionTo('admin.article.view');
-
-        // create demo users
-        $user = \App\Models\User::factory()->create([
-            'email' => 'test@example.com',
+        $user = User::create([
+            'email' => 'AG230157',
+            'password' => bcrypt('AG230157'),
         ]);
-        $user->assignRole($role1);
 
-        $user = \App\Models\User::factory()->create([
-            'email' => 'admin@example.com',
-        ]);
-        $user->assignRole($role2);
+        $user->assignRole($role);
     }
 }
