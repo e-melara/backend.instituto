@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class Alumno extends Model
 {
@@ -32,5 +33,10 @@ class Alumno extends Model
     public function userPersonas(): MorphMany
     {
         return $this->morphMany(UserPersona::class, 'userpersonaable');
+    }
+    
+    public function pensum(): belongsToMany
+    {
+        return $this->belongsToMany(Pensum::class, 'alumno_pensums', 'alumno_id', 'pensum_id');
     }
 }
