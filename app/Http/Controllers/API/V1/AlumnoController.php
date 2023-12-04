@@ -44,7 +44,7 @@ class AlumnoController extends Controller
                     'codigo_materia' => $item->materia->codigo,
                     'requisitos' => $item->prerrequisito,
                 ];
-            })->groupBy('semestre');
+            });
 
             return response()->json([
                 'carrera' => [
