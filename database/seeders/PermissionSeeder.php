@@ -32,7 +32,7 @@ class PermissionSeeder extends Seeder
 
         $user = User::create([
             'email' => 'AG230157',
-            'password' => bcrypt('AG230157'),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
         ]);
 
         $user->assignRole($role);

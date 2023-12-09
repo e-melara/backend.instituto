@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Relations\belongsToMany;
 class Alumno extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = 'carnet';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
