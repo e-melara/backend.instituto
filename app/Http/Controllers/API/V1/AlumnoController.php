@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Alumno;
 
@@ -17,12 +18,14 @@ class AlumnoController extends Controller
     
     public function pensum($id) {
         try {
-            $userId = $id;
-            if(strcmp($userId, 'me') === 0) {
-                $userId = Auth::user()->id;
+            DB::connection()->enableQueryLog();
+            $carnet = $id;
+            if(strcmp($carnet, 'me') === 0) {
+                $carnet = Auth::user()->persona->usertable->carnet;
             }
 
-            $alumno = Alumno::where('id', $userId)->whereHas('pensum')->first();
+            $alumno = Alumno::where('carnet', $carnet)->whereHas('pensum')->first();
+            $queries = DB::getQueryLog();
             if(is_null($alumno)) {
                 return response()->json([
                     'message' => 'El alumno no tiene pensum',
@@ -46,6 +49,7 @@ class AlumnoController extends Controller
                 ];
             });
 
+            Log::info($queries);
             return response()->json([
                 'carrera' => [
                     'id' => $carrera->id,

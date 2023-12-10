@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 
 // Controllers
-use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\AlumnoController;
+use App\Http\Controllers\API\V1\RefreshTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +25,17 @@ use App\Http\Controllers\API\V1\AlumnoController;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
 });
 
-Route::group(['prefix' => 'alumno'], function () {
-    Route::controller(AlumnoController::class)->group(function () {
-        Route::get('{id}/pensum', 'pensum');
+Route::group(['prefix' => 'v1'], function () {
+    Route::middleware('jwt.refresh')->group(function () {
+        Route::controller(RefreshTokenController::class)->group(function () {
+            Route::get('refresh', 'refresh');
+        });
     });
-});
-
-Route::controller(UserController::class)->group(function () {
-    Route::get('user/{id}', 'show');
+    Route::group(['prefix' => 'alumno'], function () {
+        Route::controller(AlumnoController::class)->group(function () {
+            Route::get('{id}/pensum', 'pensum');
+        });
+    });
 });

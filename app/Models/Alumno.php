@@ -41,6 +41,6 @@ class Alumno extends Model
     
     public function pensum(): belongsToMany
     {
-        return $this->belongsToMany(Pensum::class, 'alumno_pensums', 'alumno_id', 'pensum_id');
+        return $this->belongsToMany(Pensum::class, 'alumno_pensums', 'carnet', 'pensum_id');
     }
 }
