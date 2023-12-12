@@ -15,10 +15,18 @@ class AlumnoController extends Controller
     {
         $this->middleware('jwt.auth');
     }
+
+    private function getCicloInscribir($nivel) {
+        $nivelInscribir = 1;
+        if(isset($nivel) && $nivel->nivel) {
+            $nivelInscribir = $nivel->nivel;
+        }
+
+        return $nivelInscribir + 1;
+    }
     
     public function pensum($id) {
         try {
-            DB::connection()->enableQueryLog();
             $carnet = $id;
             if(strcmp($carnet, 'me') === 0) {
                 $carnet = Auth::user()->persona->usertable->carnet;
@@ -33,11 +41,15 @@ class AlumnoController extends Controller
             }
 
             $carrera = $alumno->pensum->last()->carrera;
-
             $pensum = $alumno->pensum->last()->pensumDetalles->load('materia');
-            $pensum = $pensum->map(function($item) {
+            $nivel = $alumno->nivel;
+
+            $cicloAInscribir = self::getCicloInscribir($nivel);
+            $pensum = $pensum->map(function($item) use ($cicloAInscribir) {
+                $estado = $item->no_ciclo === $cicloAInscribir;
                 return [
                     'creditos' => $item->uv,
+                    'no_ciclo'  => $item->no_ciclo,
                     'semestre' => $item->ciclo,
                     'no_orden' => $item->no_orden,
                     'pensum_materia_id' => $item->id,
@@ -46,10 +58,10 @@ class AlumnoController extends Controller
                     'nombre_materia' => $item->materia->nombre,
                     'codigo_materia' => $item->materia->codigo,
                     'requisitos' => $item->prerrequisito,
+                    'estado' => $estado ? 'INSCRIBIR' : ''
                 ];
             });
 
-            Log::info($queries);
             return response()->json([
                 'carrera' => [
                     'id' => $carrera->id,

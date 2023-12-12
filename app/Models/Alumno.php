@@ -43,4 +43,8 @@ class Alumno extends Model
     {
         return $this->belongsToMany(Pensum::class, 'alumno_pensums', 'carnet', 'pensum_id');
     }
+
+    public function nivel() {
+        return $this->belongsTo(Nivel::class, 'idnivel');
+    }
 }
