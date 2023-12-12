@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Alumno;
+use App\Models\CargaAcademica;
 
 class AlumnoController extends Controller
 {
@@ -44,9 +45,13 @@ class AlumnoController extends Controller
             $pensum = $alumno->pensum->last()->pensumDetalles->load('materia');
             $nivel = $alumno->nivel;
 
+            $materiasAInscribir = [];
             $cicloAInscribir = self::getCicloInscribir($nivel);
-            $pensum = $pensum->map(function($item) use ($cicloAInscribir) {
+            $pensum = $pensum->map(function($item) use ($cicloAInscribir, &$materiasAInscribir) {
                 $estado = $item->no_ciclo === $cicloAInscribir;
+                if($estado) {
+                    $materiasAInscribir[] = $item->materia->id;
+                }
                 return [
                     'creditos' => $item->uv,
                     'no_ciclo'  => $item->no_ciclo,
@@ -62,13 +67,37 @@ class AlumnoController extends Controller
                 ];
             });
 
+            // TODO: pendiente agregar el ciclo activo
+            $cargasAcademicas = CargaAcademica::whereIn('materia_id', $materiasAInscribir)
+                ->with(['horario', 'materia', 'docente'])
+                ->get()
+                ->map(function($item) {
+                    return [
+                        "id"            => $item->id,
+                        "docente_id"    => $item->docente_id,
+                        "materia_id"    => $item->materia_id,
+                        "horario_id"    => $item->horario_id,
+                        "ciclo_id"      => $item->ciclo_id,
+                        "horario"       => $item->horario,
+                        "materia"       => [
+                            "nombre"    => $item->materia->nombre,
+                            "codigo"    => $item->materia->codigo
+                        ],
+                        "docente"       => [
+                            "nombre"    => $item->docente->nombres,
+                            "apellido"  => $item->docente->apellidos
+                        ]
+                    ];
+                });
+
             return response()->json([
                 'carrera' => [
                     'id' => $carrera->id,
                     'nombre' => $carrera->nombre,
                     'codigo' => $carrera->codigo
                 ],
-                'pensum' => $pensum
+                'pensum' => $pensum,
+                'cargas_academicas' => $cargasAcademicas
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
