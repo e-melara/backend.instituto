@@ -16,7 +16,7 @@ class Asesoria extends Model
      * @var array
      */
     protected $fillable = [
-        'alumno_id',
+        'carnet',
         'ciclo_id',
         'estado_id',
     ];
@@ -28,7 +28,7 @@ class Asesoria extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'alumno_id' => 'integer',
+        'carnet' => 'string',
         'ciclo_id' => 'integer',
         'estado_id' => 'integer',
     ];

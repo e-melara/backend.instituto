@@ -16,8 +16,9 @@ class Nota extends Model
      * @var array
      */
     protected $fillable = [
-        'asesoria_detalle_id',
-        'nota',
+        'carnet',
+        'estado_id',
+        'carga_academica_id',
     ];
 
     /**
@@ -27,12 +28,13 @@ class Nota extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'asesoria_detalle_id' => 'integer',
-        'nota' => 'float',
+        'estado_id' => 'integer',
+        'carga_academica_id' => 'integer',
+        'carnet' => 'string',
     ];
 
-    public function asesoriaDetalle(): BelongsTo
+    public function alumno(): BelongsTo
     {
-        return $this->belongsTo(AsesoriaDetalle::class);
+        return $this->belongsTo(Alumno::class, 'carnet');
     }
 }

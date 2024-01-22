@@ -5,7 +5,9 @@ use App\Http\Controllers\API\AuthController;
 
 // Controllers
 use App\Http\Controllers\API\V1\AlumnoController;
+use App\Http\Controllers\API\V1\PensumController;
 use App\Http\Controllers\API\V1\RefreshTokenController;
+use App\Http\Controllers\API\V1\MateriasDocentesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +35,21 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('refresh', 'refresh');
         });
     });
+
     Route::group(['prefix' => 'alumno'], function () {
         Route::controller(AlumnoController::class)->group(function () {
             Route::get('{id}/pensum', 'pensum');
+        });
+    });
+    Route::group(['prefix' => 'pensum'], function(){
+        Route::controller(PensumController::class)->group(function() {
+            Route::post('/', 'store');
+        });
+    });
+    Route::group(['prefix' => 'materias'], function() {
+        Route::controller(MateriasDocentesController::class)->group(function() {
+            Route::get('/docentes', 'getMateriasDocentes');
+            Route::get('/{id_carga}/carga', 'getAlumnosCargasAcademica');
         });
     });
 });
