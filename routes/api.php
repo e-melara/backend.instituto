@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 
 // Controllers
+use App\Http\Controllers\API\V1\AlumnoMateria;
 use App\Http\Controllers\API\V1\AlumnoController;
 use App\Http\Controllers\API\V1\PensumController;
 use App\Http\Controllers\API\V1\RefreshTokenController;
@@ -39,6 +40,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'alumno'], function () {
         Route::controller(AlumnoController::class)->group(function () {
             Route::get('{id}/pensum', 'pensum');
+        });
+        Route::controller(AlumnoMateria::class)->group(function () {
+            Route::get('materias', 'getMaterias');
+            Route::get('materias/{id}', 'getMateria');
         });
     });
     Route::group(['prefix' => 'pensum'], function(){

@@ -37,4 +37,9 @@ class Nota extends Model
     {
         return $this->belongsTo(Alumno::class, 'carnet');
     }
+
+    public function cargaAcademica(): BelongsTo
+    {
+        return $this->belongsTo(CargaAcademica::class);
+    }
 }
