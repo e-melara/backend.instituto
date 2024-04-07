@@ -8,8 +8,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <title>PORTAL</title>
-    <script type="module" crossorigin src="/assets/index-7a917e96.js"></script>
-    <link rel="stylesheet" href="/assets/index-9640aa6c.css">
+    <script type="module" crossorigin src="/assets/index-f0315e2c.js"></script>
+    <link rel="stylesheet" href="/assets/index-98ecea74.css">
   </head>
   <body>
     <div id="app"></div>
