@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
             'success' => false,
             'message' => 'Credenciales no validas',
             'errors' => $validator->errors(),
-        ]));
+        ])->setStatusCode(422));
     }
 
     public function messages() : array

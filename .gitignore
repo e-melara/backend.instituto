@@ -20,3 +20,4 @@ yarn-error.log
 /.vscode
 **/.DS_Store
 **/storage/logs/*.log
+**/*.log

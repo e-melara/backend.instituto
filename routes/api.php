@@ -26,6 +26,7 @@ use App\Http\Controllers\API\V1\MateriasDocentesController;
 // });
 
 Route::controller(AuthController::class)->group(function () {
+    Route::post('change/password', 'changePassword');
     Route::post('login', 'login');
     Route::post('logout', 'logout');
 });
