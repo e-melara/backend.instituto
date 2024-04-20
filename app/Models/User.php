@@ -52,10 +52,10 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function rol(): BelongsToMany
-    {
-        return $this->belongsToMany(Rol::class);
-    }
+    // public function rol(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Rol::class);
+    // }
 
     public function persona(): HasOne
     {
@@ -64,20 +64,18 @@ class User extends Authenticatable implements JWTSubject
 
     private function getUsertablesType(HasOne $persona) {
         $usertable = $persona->first();
-        if(strcmp($usertable->usertable_type, 'App\\Models\\Alumno')) {
-            $alumno = $usertable->usertable()->first();
-            return [
-                "nombre" => $alumno->nombres,
-                "apellido" => $alumno->apellidos,
-            ];
-        } else if(strcmp($usertable->usertable_type, 'App\\Models\\Docente')) {
-            $docente = $usertable->usertable()->first();
-            return [
-                "nombre" => $docente->nombres,
-                "apellido" => $docente->apellidos,
-            ];
-        } else {
-            return null;
+        $type = $usertable->usertable_type;
+
+        switch ($type) {
+            case 'App\Models\Alumno':
+            case 'App\Models\Docente':
+                $persona = $usertable->usertable()->first();
+                return [
+                    "nombre" => $persona->nombres,
+                    "apellido" => $persona->apellidos,
+                ];
+            default:
+                return null;
         }
     }
 }

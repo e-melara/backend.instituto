@@ -35,4 +35,9 @@ class Materia extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function configuracion_nota()
+    {
+        return $this->hasOne(ConfiguracionNota::class, 'id', 'id_config_nota');
+    }
 }

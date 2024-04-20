@@ -56,6 +56,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::controller(MateriasDocentesController::class)->group(function() {
             Route::get('/docentes', 'getMateriasDocentes');
             Route::get('/{id_carga}/carga', 'getAlumnosCargasAcademica');
+            Route::get('/{materia}', 'getMateriasNotes');
         });
     });
 });
