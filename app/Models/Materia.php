@@ -40,4 +40,9 @@ class Materia extends Model
     {
         return $this->hasOne(ConfiguracionNota::class, 'id', 'id_config_nota');
     }
+
+    public function configuracion_porcentaje ()
+    {
+        return $this->hasOne(ConfiguracionPorcentaje::class, 'id', 'id_porcentaje_nota');
+    }
 }

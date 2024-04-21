@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Nota;
 use App\Models\CargaAcademica;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MateriasDocentesController extends Controller
@@ -39,9 +40,17 @@ class MateriasDocentesController extends Controller
         ]);
     }
 
-    public function getMateriasNotes($materia): JsonResponse
+    public function getMateriasNotes($carga_academica_id): JsonResponse
     {
-        $m = Materia::find($materia);
+        $cargaAcademica = CargaAcademica::where('id', $carga_academica_id)
+            ->with(['materia' => function($q) {
+                $q->select('id','nombre', 'codigo');
+            }, 'docente' => function($q) {
+                $q->select('id','nombres', 'apellidos');
+            }])
+            ->first();
+
+        $m = Materia::find($cargaAcademica->materia->id);
         $config = $m->configuracion_nota()->first();
 
         $arrayAssocColumns = array(
@@ -57,32 +66,41 @@ class MateriasDocentesController extends Controller
             'notapract2', 'notafinal_practica', 'notafinal_teoria+practica', 'examenreposicion', 'notapract4', 'notapract3'
         ]);
         $arrayLabs = [];
-        $arrayResponse = collect([]);
-        $arrayPracticas = collect([]);
+        $arrayResponse = collect();
+        $arrayPracticas = collect();
 
         try {
+            $notaNotInclude = collect(explode(',', $cargaAcademica->notes_add));
             collect($config)->filter(function($item, $key) {
                 return !(strcasecmp($item, '-') === 0 || str_contains($key, 'x100'));
             })->forget($exclude)->groupBy(function($item, $key) {
                 return substr($key, 0, 7);
-            })->each(function($item, $key) use (&$arrayResponse, $arrayAssocColumns, &$arrayLabs, $arrayPracticas) {
+            })->each(function($item, $key) use (&$arrayResponse, $arrayAssocColumns, &$arrayLabs, $arrayPracticas, $notaNotInclude) {
                 $keyAssoc = @$arrayAssocColumns[$key];
                 if (!str_starts_with($key, 'lab') && isset($keyAssoc)) {
                     if(count($item) === 1) {
-                        $arrayResponse->put($keyAssoc, $item[0]);
+                        if (!in_array($item[0], $notaNotInclude->toArray())) {
+                            $arrayResponse->put($keyAssoc, $item[0]);
+                        }
                     } else {
                         $array = [];
                         foreach ($item as $key => $v) {
-                            $name = $keyAssoc . ' ' . ($key + 1);
-                            $array[$name] = $v;
+                            if(!in_array($v, $notaNotInclude->toArray())) {
+                                $name = $keyAssoc . ' ' . ($key + 1);
+                                $array[$name] = $v;
+                            }
                         }
-                        $arrayResponse->put($keyAssoc, $array);
+                        if(count($array) > 0)
+                            $arrayResponse->put($keyAssoc, $array);
                     }
                 } else if(str_starts_with($key, 'lab')) {
-                    $indexLab = intval(substr($key, 3, 1));
-                    $arrayLabs['Laboratorio '.$indexLab] = $item[0];
+                    if(!in_array($item[0], $notaNotInclude->toArray())) {
+                        $indexLab = intval(substr($key, 3, 1));
+                        $arrayLabs['Laboratorio '.$indexLab] = $item[0];
+                    }
                 } else {
-                    $arrayPracticas->put( mb_strtoupper($key, 'UTF-8') , $item[0]);
+                    if(!in_array($item[0], $notaNotInclude->toArray()))
+                        $arrayPracticas->put( mb_strtoupper($key, 'UTF-8') , $item[0]);
                 }
             });
 
@@ -96,11 +114,93 @@ class MateriasDocentesController extends Controller
 
             return response()->json([
                 'notas' => $arrayResponse,
+                'docente'   => $cargaAcademica->docente,
+                'materia'   => $cargaAcademica->materia
             ]);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return response()->json([
                 'message' => 'Error al obtener la configuración de notas, pongase en contacto con el administrador del sistema.'
+            ], 500);
+        }
+    }
+
+    private function updateAvgNote(int $carga_academica_id) {
+        $cargaAcademica = CargaAcademica::where('id', $carga_academica_id)->with(['materia' => function($q) {
+            $q->with('configuracion_porcentaje');
+        }])->first();
+
+        $configPorcentaje = collect($cargaAcademica->materia->configuracion_porcentaje)->filter(function($item, $key) {
+            return (str_ends_with($key, '_config') && $item !== '0');
+        });
+
+        if ($configPorcentaje->isNotEmpty()) {
+            $rawQueryUpdateNote = "UPDATE notas SET ";
+            $rawQueryUpdateAvgEnd = "UPDATE notas SET ";
+
+            $configNotaFinal = $configPorcentaje->filter(function ($item, $key) {
+                return str_starts_with($key, 'nota_final_');
+            });
+
+            $configPorcentaje->forget($configNotaFinal->keys());
+            $configPorcentaje->each(function($config) use (&$rawQueryUpdateNote) {
+                $rawQueryUpdateNote .= sprintf('%s, ', $config);
+            });
+
+            $configNotaFinal->each(function ($config) use (&$rawQueryUpdateAvgEnd) {
+                $rawQueryUpdateAvgEnd .= sprintf('%s, ', $config);
+            });
+
+            $rawQueryUpdateNote = substr($rawQueryUpdateNote, 0, -2). sprintf(' WHERE carga_academica_id = %u', $carga_academica_id);
+            $rawQueryUpdateAvgEnd = substr($rawQueryUpdateAvgEnd, 0, -2). sprintf(' WHERE carga_academica_id = %u', $carga_academica_id);
+
+            // primero actualizamos los valores de los promedios pequeños
+            DB::statement($rawQueryUpdateNote);
+            // y luego actualizamos el promedio final
+            DB::statement($rawQueryUpdateAvgEnd);
+        }
+    }
+
+    public function updateMateriasNotes(Request $request, $carga_academica_id)
+    {
+        $keyNote = $request->input('key_note');
+        $notes = $request->input('notes');
+        DB::beginTransaction();
+        try {
+            $notesCollect = collect($notes);
+            $rawQueryCase = sprintf('UPDATE notas SET %s = CASE ',
+                $keyNote);
+            $notesCollect->each(function($note) use (&$rawQueryCase) {
+                $rawQueryCase .= sprintf('WHEN carnet = \'%s\' THEN %s ', $note['carnet'], $note['valor']);
+            });
+
+            $carnets = $notesCollect->pluck('carnet')->implode(function($carnet) {
+                return sprintf('\'%s\'', $carnet);
+            }, ',');
+            $rawQueryCase .= sprintf('END WHERE carga_academica_id = %s and carnet in (%s)', $carga_academica_id, $carnets);
+
+            DB::statement($rawQueryCase);
+
+            // funcion para actualizar el promedio de notas
+            self::updateAvgNote($carga_academica_id);
+
+            $cargaAcademica = CargaAcademica::find($carga_academica_id);
+
+            if($cargaAcademica->notes_add === null):
+                $cargaAcademica->notes_add = $keyNote;
+            else:
+                $cargaAcademica->notes_add = $cargaAcademica->notes_add . ',' . $keyNote;
+            endif;
+            $cargaAcademica->save();
+            DB::commit();
+            return response()->json(data: [
+                'message' => 'Notas actualizadas correctamente.',
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            return response()->json([
+                'message' => 'Error al actualizar las notas, pongase en contacto con el administrador del sistema.'
             ], 500);
         }
     }

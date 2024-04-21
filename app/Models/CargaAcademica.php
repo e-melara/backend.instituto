@@ -20,6 +20,7 @@ class CargaAcademica extends Model
         'materia_id',
         'horario_id',
         'ciclo_id',
+        'notes_add'
     ];
 
     /**
