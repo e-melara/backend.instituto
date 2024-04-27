@@ -21,21 +21,25 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $credentials = request(['email', 'password']);
-        $token = JWTAuth::attempt($credentials);
+        try {
+            $credentials = request(['email', 'password']);
+            $token = JWTAuth::attempt($credentials);
 
-        if (!$token) {
+            if (!$token) {
+                throw new \Exception('Credenciales no validas');
+            }
+            return response()->json(compact('token'));
+        } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Credenciales no validas',
             ], 401);
         }
-        return response()->json(compact('token'));
     }
 
     public function logout()
     {
         Auth::logout();
-        JWTAuth::invalidate(); 
+        JWTAuth::invalidate();
         return response()->json([
             'message' => 'Successfully logged out',
         ]);
@@ -61,7 +65,7 @@ class AuthController extends Controller
 
         $auth->password = Hash::make($credentials['new_password']);
         $auth->save();
-        
+
         return response()->json([
             'message' => 'Contraseña actualizada correctamente',
         ]);

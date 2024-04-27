@@ -19,7 +19,9 @@ class MateriasDocentesController extends Controller
         $docente = Auth::user()->persona->usertable;
         $cargas = CargaAcademica::where('docente_id', $docente->id)
             ->whereNull('deleted_at')
-            ->with(['materia', 'horario'])
+            ->with(['materia' => function($q) {
+                $q->with(['carrera']);
+            }, 'horario'])
             ->get();
 
         return response()->json([
@@ -32,7 +34,6 @@ class MateriasDocentesController extends Controller
             ->with(['alumno' => function($query) {
                 $query->select('apellidos', 'carnet', 'nombres');
             }])
-            ->select('id', 'carnet', 'estado_id', 'carga_academica_id')
             ->get();
 
         return response()->json([
@@ -52,6 +53,7 @@ class MateriasDocentesController extends Controller
 
         $m = Materia::find($cargaAcademica->materia->id);
         $config = $m->configuracion_nota()->first();
+        $porcentaje = $m->configuracion_porcentaje()->first();
 
         $arrayAssocColumns = array(
             'parcial' => 'Parcial',
@@ -113,6 +115,7 @@ class MateriasDocentesController extends Controller
             }
 
             return response()->json([
+                'config' => $porcentaje->id,
                 'notas' => $arrayResponse,
                 'docente'   => $cargaAcademica->docente,
                 'materia'   => $cargaAcademica->materia

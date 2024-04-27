@@ -45,4 +45,9 @@ class Materia extends Model
     {
         return $this->hasOne(ConfiguracionPorcentaje::class, 'id', 'id_porcentaje_nota');
     }
+
+    public function carrera()
+    {
+        return $this->belongsTo(Carrera::class, 'carreras_id', 'id');
+    }
 }

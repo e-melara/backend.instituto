@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AlumnoMateriaResource;
 
 use App\Models\Nota;
-use App\Models\AlumnoNotaMateriaView as NotaView;
+use App\Models\AlumnoNotaCargaAcademica as NotaView;
 
 class AlumnoMateria extends Controller
 {
@@ -19,9 +18,15 @@ class AlumnoMateria extends Controller
 
     public function getMaterias() {
         $carnet = Auth::user()->persona->usertable->carnet;
-        $notas  = NotaView::where('carnet', $carnet)->get();
+        $notas  = NotaView::where('carnet', $carnet)->with(['docente' => function($q) {
+            $q->select('id', 'nombres', 'apellidos');
+        }, 'alumno'=> function($q) {
+            $q->select('carnet', 'nombres', 'apellidos');
+        } ])->get();
 
-        return new AlumnoMateriaResource($notas);
+        return response()->json([
+            'materias' => $notas,
+        ], 200);
     }
 
     public function getMateria($id) {
