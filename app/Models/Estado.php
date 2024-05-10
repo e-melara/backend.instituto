@@ -9,6 +9,11 @@ class Estado extends Model
 {
     use HasFactory;
 
+    const ENVIADA = '007';
+    const ACADEMICA = '008';
+    const PAGADURIA = '009';
+    const RECHAZADA = '004';
+
     /**
      * Indicates if the model should be timestamped.
      *

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 use App\Models\Alumno;
+use App\Models\Asesoria;
+use App\Models\AsesoriaDetalle;
 use App\Models\CargaAcademica;
 
 class AlumnoController extends Controller
@@ -24,7 +25,7 @@ class AlumnoController extends Controller
 
         return $nivelInscribir + 1;
     }
-    
+
     public function pensum($id) {
         try {
             $carnet = $id;
@@ -33,7 +34,6 @@ class AlumnoController extends Controller
             }
 
             $alumno = Alumno::where('carnet', $carnet)->whereHas('pensum')->first();
-            $queries = DB::getQueryLog();
             if(is_null($alumno)) {
                 return response()->json([
                     'message' => 'El alumno no tiene pensum',
@@ -89,15 +89,38 @@ class AlumnoController extends Controller
                     ];
                 });
 
-            return response()->json([
+            // verificando si el alumno posee asesoria activas
+            $asesoriaActiva = Asesoria::where('carnet', $carnet)->with(['estado'])->first();
+
+            $array = [
                 'carrera' => [
                     'id' => $carrera->id,
                     'nombre' => $carrera->nombre,
                     'codigo' => $carrera->codigo
                 ],
                 'pensum' => $pensum,
+                'asesoria_activa' => isset($asesoriaActiva) ? 1 : 0,
+                'aseroria'  => $asesoriaActiva,
                 'cargas_academicas' => $cargasAcademicas
-            ], 200);
+            ];
+
+            if(isset($asesoriaActiva)) {
+                $array['asesoria_detalle'] = AsesoriaDetalle::where('asesoria_id', $asesoriaActiva->id)
+                    ->with(['cargaAcademica' => function($q) {
+                        $q->with(['materia', 'docente']);
+                    }])
+                    ->get()
+                    ->map(function($detalle) {
+                        return [
+                            'materia_codigo'    => $detalle->cargaAcademica->materia->codigo,
+                            'materia_nombre'    => $detalle->cargaAcademica->materia->nombre,
+                            'docente_nombres' => $detalle->cargaAcademica->docente->nombres,
+                            'docente_apellidos' => $detalle->cargaAcademica->docente->apellidos,
+                        ];
+                    });
+            }
+
+            return response()->json($array, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error al obtener el pensum del alumno',
