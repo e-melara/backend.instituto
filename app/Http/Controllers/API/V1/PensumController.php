@@ -10,7 +10,9 @@ use App\Models\Ciclo;
 use App\Models\Estado;
 use App\Models\Asesoria;
 use App\Models\AsesoriaDetalle;
+use App\Models\Nota;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PensumController extends Controller
 {
@@ -77,5 +79,45 @@ class PensumController extends Controller
                     'apellidos_alumno' => $item->alumno->apellidos,
                 ];
             });
+    }
+
+    public function updateAsesoria (Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $estado = Estado::where('codigo', $request->input('estado'))->first();
+            Asesoria::where('id', $id)->update([
+                'estado_id' => $estado->id,
+            ]);
+
+            if($estado->codigo == Estado::FINALIZADA) {
+                $asesoria = Asesoria::where('id', $id)->with(['detalles'])->first();
+                $carnet = $asesoria->carnet;
+                $asesoria->detalles->each(function($detalle) use ($carnet) {
+                    Nota::create([
+                        'estado_id' => 3,
+                        'carnet' => $carnet,
+                        'matricula_id' => 1,
+                        'carga_academica_id' => $detalle->carga_academica_id,
+                    ]);
+                });
+
+                DB::commit();
+                return response()->json([
+                    'message' => 'Asesoria finalizada con exito'
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Asesoria actualizada con exito'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            return response()->json([
+                'message' => 'Tenemos problemas con el servidor, intente mas tarde'
+            ], 503);
+        }
     }
 }

@@ -11,6 +11,15 @@ class Asesoria extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const ENVIADA = '007';
+    public const ACADEMICA = '008';
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

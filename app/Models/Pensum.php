@@ -19,6 +19,12 @@ class Pensum extends Model
      */
     public $timestamps = false;
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

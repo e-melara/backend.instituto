@@ -10,6 +10,8 @@ class Nota extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,6 +21,7 @@ class Nota extends Model
         'carnet',
         'estado_id',
         'carga_academica_id',
+        'matricula_id',
     ];
 
     /**

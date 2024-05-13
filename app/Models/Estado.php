@@ -13,6 +13,7 @@ class Estado extends Model
     const ACADEMICA = '008';
     const PAGADURIA = '009';
     const RECHAZADA = '004';
+    const FINALIZADA = '009';
 
     /**
      * Indicates if the model should be timestamped.

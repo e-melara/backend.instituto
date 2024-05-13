@@ -33,7 +33,7 @@ class AlumnoController extends Controller
                 $carnet = Auth::user()->persona->usertable->carnet;
             }
 
-            $alumno = Alumno::where('carnet', $carnet)->whereHas('pensum')->first();
+            $alumno = Alumno::where('carnet', $carnet)->select('nombres', 'apellidos', 'carnet')->whereHas('pensum')->first();
             if(is_null($alumno)) {
                 return response()->json([
                     'message' => 'El alumno no tiene pensum',
@@ -101,7 +101,8 @@ class AlumnoController extends Controller
                 'pensum' => $pensum,
                 'asesoria_activa' => isset($asesoriaActiva) ? 1 : 0,
                 'aseroria'  => $asesoriaActiva,
-                'cargas_academicas' => $cargasAcademicas
+                'cargas_academicas' => $cargasAcademicas,
+                'student' => $alumno->only(['nombres', 'apellidos', 'carnet'])
             ];
 
             if(isset($asesoriaActiva)) {
