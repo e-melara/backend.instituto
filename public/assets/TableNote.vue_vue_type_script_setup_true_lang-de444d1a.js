@@ -1,4 +1,4 @@
-import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t as u,i as m}from"./index-4fe17480.js";const X=(t,n=2)=>parseFloat(t==null?void 0:t.toString()).toFixed(n),i=`
+import{d as B,r,h as u,N as P,Z as m,c as A,e as n,g as I,v as D,B as M,bJ as T,t as X,i}from"./index-011ca880.js";const _=(d,o=2)=>parseFloat(d==null?void 0:d.toString()).toFixed(o),f=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -27,7 +27,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>3</td>
   <td>12%</td>
 </tr>
-`,_=`
+`,b=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -56,7 +56,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>3</td>
   <td>15%</td>
 </tr>
-`,f=`
+`,g=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -100,7 +100,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>10%</td>
 </tr>
-`,b=`
+`,U=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -142,7 +142,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>LAB. 3</td>
   <td>TOTAL 5%</td>
 </tr>
-`,g=`
+`,h=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -206,7 +206,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>NOTA</td>
   <td>Total 20%</td>
 </tr>
-`,U=`
+`,J=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -237,7 +237,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>15%</td>
 </tr>
-`,h=`
+`,V=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -268,7 +268,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>20%</td>
 </tr>
-`,J=`
+`,v=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -312,7 +312,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>PT</td>
   <td>30%</td>
 </tr>
-`,V=`
+`,y=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -359,7 +359,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>10%</td>
 </tr>
-`,v=`
+`,k=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -414,7 +414,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>NOTA</td>
   <td>TOTAL 30%</td>
 </tr>
-`,y=`
+`,x=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -458,7 +458,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>PT</td>
   <td>30%</td>
 </tr>
-`,k=`
+`,z=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -523,7 +523,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>NOTA</td>
   <td>TOTAL 20%</td>
 </tr>
-`,x=`
+`,H=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -547,7 +547,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>30%</td>
 </tr>
-`,z=`
+`,$=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -588,7 +588,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>10%</td>
 </tr>
-`,H=`
+`,G=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -643,7 +643,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>NOTA</td>
   <td>TOTAL 30%</td>
 </tr>
-`,$=`
+`,W=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -673,7 +673,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>1</td>
   <td>20%</td>
 </tr>
-`,G=`
+`,q=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -737,7 +737,7 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>NOTA</td>
   <td>TOTAL 20%</td>
 </tr>
-`,W=`
+`,Q=`
 <tr>
   <td rowspan="3">No</td>
   <td rowspan="3">CARNET</td>
@@ -766,4 +766,4 @@ import{d as S,r as a,h as F,Z as B,c as A,e as o,g as O,v as w,B as l,bJ as T,t 
   <td>3</td>
   <td>TOTAL 12%</td>
 </tr>
-`,c=new Map([[1,{template:i,number_of_columns:15}],[2,{template:U,number_of_columns:16}],[3,{template:z,number_of_columns:25}],[4,{template:f,number_of_columns:28}],[5,{template:H,number_of_columns:37}],[6,{template:k,number_of_columns:46}],[7,{template:J,number_of_columns:27}],[8,{template:_,number_of_columns:15}],[9,{template:h,number_of_columns:16}],[10,{template:x,number_of_columns:11}],[11,{template:b,number_of_columns:27}],[12,{template:$,number_of_columns:15}],[13,{template:G,number_of_columns:16}],[14,{template:v,number_of_columns:37}],[15,{template:V,number_of_columns:31}],[16,{template:g,number_of_columns:45}],[17,{template:y,number_of_columns:27}],[18,{template:W,number_of_columns:15}]]),q=t=>new Promise((n,s)=>{console.log("config_id",t),c.has(t)?n(c.get(t)):s("No se encontro la configuracion")}),Q={class:"table-responsive"},Z={key:0,class:"table-note table"},j=["innerHTML"],K={key:1},Y=O("h3",null,"Tenemos un problema al mostrar la notas, consulta al administrador del sistema",-1),tt=[Y],At=S({__name:"TableNote",props:{config:{type:Number,default:0,required:!0},alumnos:{type:Array,default:()=>[]}},setup(t){const n=t,s=a(!1),I=a([]),R=a(0),L=a(""),{config:e,alumnos:P}=F(n),D=async()=>{try{s.value=!0;const d=await q(e.value);L.value=d.template,R.value=d.number_of_columns}catch{s.value=!1}};return B(async()=>{await D(),I.value=P.value.map((d,C)=>{const{alumno:E}=d,p=[C+1,E.carnet,`${E.apellidos} ${E.nombres}`],r=T.chunk(T.filter(d,(N,M)=>T.startsWith(M,"nota_")),R.value)[0];return T.concat(p,r)})}),(d,C)=>(A(),o("div",Q,[s.value?(A(),o("table",Z,[O("thead",{innerHTML:L.value},null,8,j),O("tbody",null,[(A(!0),o(w,null,l(I.value,(E,p)=>(A(),o("tr",{key:p},[(A(!0),o(w,null,l(E,(r,N)=>(A(),o("td",{key:N},u(N>2?m(X)(r):r),1))),128))]))),128))])])):(A(),o("div",K,tt))]))}});export{At as _,X as f,q as s};
+`,S=new Map([[1,{template:f,number_of_columns:15}],[2,{template:J,number_of_columns:16}],[3,{template:$,number_of_columns:25}],[4,{template:g,number_of_columns:28}],[5,{template:G,number_of_columns:37}],[6,{template:z,number_of_columns:46}],[7,{template:v,number_of_columns:27}],[8,{template:b,number_of_columns:15}],[9,{template:V,number_of_columns:16}],[10,{template:H,number_of_columns:11}],[11,{template:U,number_of_columns:27}],[12,{template:W,number_of_columns:15}],[13,{template:q,number_of_columns:16}],[14,{template:k,number_of_columns:37}],[15,{template:y,number_of_columns:31}],[16,{template:h,number_of_columns:45}],[17,{template:x,number_of_columns:27}],[18,{template:Q,number_of_columns:15}]]),Z=d=>new Promise((o,s)=>{S.has(d)?o(S.get(d)):s("No se encontro la configuracion")}),j={class:"table-responsive"},K={key:0,class:"table-note table"},Y=["innerHTML"],tt={key:1},dt=I("h3",null,"Tenemos un problema al mostrar la notas, consulta al administrador del sistema",-1),At=[dt],ot=B({__name:"TableNote",props:{config:{type:Number,default:0,required:!0},alumnos:{type:Array,default:()=>[]}},setup(d){const o=d,s=r(!1),p=r([]),R=r(0),L=r(""),{config:C,alumnos:w}=u(o),l=async()=>{try{s.value=!0;const t=await Z(C.value);L.value=t.template,R.value=t.number_of_columns}catch{s.value=!1}};P(C,async t=>{await l()}),P(w,async t=>{c()});const c=()=>{p.value=w.value.map((t,e)=>{const{alumno:E}=t,N=[e+1,E.carnet,`${E.apellidos} ${E.nombres}`],a=T.chunk(T.filter(t,(O,F)=>T.startsWith(F,"nota_")),R.value)[0];return T.concat(N,a)},[p.value])};return m(async()=>{await l(),c()}),(t,e)=>(A(),n("div",j,[s.value?(A(),n("table",K,[I("thead",{innerHTML:L.value},null,8,Y),I("tbody",null,[(A(!0),n(D,null,M(p.value,(E,N)=>(A(),n("tr",{key:N},[(A(!0),n(D,null,M(E,(a,O)=>(A(),n("td",{key:O},X(O>2?i(_)(a):a),1))),128))]))),128))])])):(A(),n("div",tt,At))]))}});export{ot as _,_ as f,Z as s};
