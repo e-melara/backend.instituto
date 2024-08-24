@@ -1,0 +1,53 @@
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[4,5]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[1,2]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[3,4,5,6]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[4,5]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[7,8,9,10]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[7,8,9,10]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[4]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[11,12]  
+[2024-08-24 18:47:38] local.ALERT: Approved[]  
+[2024-08-24 18:47:38] local.ALERT: Requisitos[11,12]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[4,5]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[1,2]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[3,4,5,6]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[4,5]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[7,8,9,10]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[7,8,9,10]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[4]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[11,12]  
+[2024-08-24 18:47:39] local.ALERT: Approved[]  
+[2024-08-24 18:47:39] local.ALERT: Requisitos[11,12]  
+[2024-08-24 20:27:38] local.INFO: {"id":1,"pensum_id":1,"materia_id":1,"uv":3,"ciclo":"I","no_ciclo":1,"no_orden":1,"prerrequisito":"0","estado":"C","materia":{"id":1,"nombre":"Sociolog\u00eda","codigo":"SO01","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":2,"pensum_id":1,"materia_id":2,"uv":4,"ciclo":"I","no_ciclo":1,"no_orden":2,"prerrequisito":"0","estado":"C","materia":{"id":2,"nombre":"Psicolog\u00eda y Salud Mental","codigo":"PSM02","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":3,"pensum_id":1,"materia_id":3,"uv":4,"ciclo":"I","no_ciclo":1,"no_orden":3,"prerrequisito":"0","estado":"C","materia":{"id":3,"nombre":"Tecnolog\u00eda Educativa","codigo":"TE03","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":4,"pensum_id":1,"materia_id":4,"uv":4,"ciclo":"I","no_ciclo":1,"no_orden":4,"prerrequisito":"0","estado":"C","materia":{"id":4,"nombre":"Anatom\u00eda y Fisiolog\u00eda","codigo":"AF04","carreras_id":1,"id_config_nota":2,"id_porcentaje_nota":2,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":5,"pensum_id":1,"materia_id":5,"uv":4,"ciclo":"I","no_ciclo":1,"no_orden":5,"prerrequisito":"0","estado":"C","materia":{"id":5,"nombre":"Microbiolog\u00eda y Parasitolog\u00eda","codigo":"MP05","carreras_id":1,"id_config_nota":2,"id_porcentaje_nota":2,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":6,"pensum_id":1,"materia_id":6,"uv":3,"ciclo":"I","no_ciclo":1,"no_orden":6,"prerrequisito":"0","estado":"C","materia":{"id":6,"nombre":"Bases Fundamentales de Enfermer\u00eda","codigo":"BFE06","carreras_id":1,"id_config_nota":3,"id_porcentaje_nota":3,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":7,"pensum_id":1,"materia_id":7,"uv":4,"ciclo":"II","no_ciclo":2,"no_orden":7,"prerrequisito":"4,5","estado":"P","materia":{"id":7,"nombre":"Elementos de Epidemiolog\u00eda","codigo":"EE07","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":8,"pensum_id":1,"materia_id":8,"uv":4,"ciclo":"II","no_ciclo":2,"no_orden":8,"prerrequisito":"1,2","estado":"P","materia":{"id":8,"nombre":"\u00c9tica y Legislaci\u00f3n en Enfermer\u00eda
+
+","codigo":"ELE08","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":9,"pensum_id":1,"materia_id":9,"uv":8,"ciclo":"II","no_ciclo":2,"no_orden":9,"prerrequisito":"3,4,5,6","estado":"P","materia":{"id":9,"nombre":"Fundamentos de Enfermer\u00eda","codigo":"FE09","carreras_id":1,"id_config_nota":4,"id_porcentaje_nota":4,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":10,"pensum_id":1,"materia_id":10,"uv":3,"ciclo":"II","no_ciclo":2,"no_orden":10,"prerrequisito":"4,5","estado":"P","materia":{"id":10,"nombre":"Principios B\u00e1sicos de Farmacolog\u00eda","codigo":"PBF10","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":11,"pensum_id":1,"materia_id":11,"uv":10,"ciclo":"III","no_ciclo":3,"no_orden":11,"prerrequisito":"7,8,9,10","estado":"P","materia":{"id":11,"nombre":"Atenci\u00f3n al Adolescente y al Adulto","codigo":"AAA11","carreras_id":1,"id_config_nota":5,"id_porcentaje_nota":5,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":12,"pensum_id":1,"materia_id":12,"uv":10,"ciclo":"III","no_ciclo":3,"no_orden":12,"prerrequisito":"7,8,9,10","estado":"P","materia":{"id":12,"nombre":"Atenci\u00f3n a la Mujer y a la Ni\u00f1ez I","codigo":"AMNI12","carreras_id":1,"id_config_nota":6,"id_porcentaje_nota":6,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":13,"pensum_id":1,"materia_id":13,"uv":2,"ciclo":"III","no_ciclo":3,"no_orden":13,"prerrequisito":"4","estado":"P","materia":{"id":13,"nombre":"Ingl\u00e9s T\u00e9cnico","codigo":"IT13","carreras_id":1,"id_config_nota":1,"id_porcentaje_nota":1,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":14,"pensum_id":1,"materia_id":14,"uv":10,"ciclo":"IV","no_ciclo":4,"no_orden":14,"prerrequisito":"11,12","estado":"P","materia":{"id":14,"nombre":"Atenci\u00f3n a la Mujer y a la Ni\u00f1ez II","codigo":"AMNII14","carreras_id":1,"id_config_nota":4,"id_porcentaje_nota":4,"deleted_at":null}}  
+[2024-08-24 20:27:38] local.INFO: {"id":15,"pensum_id":1,"materia_id":15,"uv":10,"ciclo":"IV","no_ciclo":4,"no_orden":15,"prerrequisito":"11,12","estado":"P","materia":{"id":15,"nombre":"Enfermer\u00eda en Salud comunitaria","codigo":"ESC15","carreras_id":1,"id_config_nota":7,"id_porcentaje_nota":7,"deleted_at":null}}  
