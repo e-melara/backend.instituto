@@ -33,7 +33,7 @@ class MateriasDocentesController extends Controller
         $notas = Nota::where('carga_academica_id', $carga_id)
             ->with(['alumno' => function($query) {
                 $query->select('apellidos', 'carnet', 'nombres');
-            }])
+            }, 'estado'])
             ->get();
 
         return response()->json([
@@ -121,7 +121,6 @@ class MateriasDocentesController extends Controller
                 'materia'   => $cargaAcademica->materia
             ]);
         } catch (\Throwable $th) {
-            Log::error($th->getMessage());
             return response()->json([
                 'message' => 'Error al obtener la configuración de notas, pongase en contacto con el administrador del sistema.'
             ], 500);
@@ -133,8 +132,10 @@ class MateriasDocentesController extends Controller
             $q->with('configuracion_porcentaje');
         }])->first();
 
-        $configPorcentaje = collect($cargaAcademica->materia->configuracion_porcentaje)->filter(function($item, $key) {
-            return (str_ends_with($key, '_config') && $item !== '0');
+        $collectioMateria = collect($cargaAcademica->materia->configuracion_porcentaje);
+
+        $configPorcentaje = $collectioMateria->diff(['promedio'])->filter(function($item, $key) {
+            return (str_ends_with($key, '_config') && $item !== '0' && !is_null($item));
         });
 
         if ($configPorcentaje->isNotEmpty()) {
@@ -156,11 +157,17 @@ class MateriasDocentesController extends Controller
 
             $rawQueryUpdateNote = substr($rawQueryUpdateNote, 0, -2). sprintf(' WHERE carga_academica_id = %u', $carga_academica_id);
             $rawQueryUpdateAvgEnd = substr($rawQueryUpdateAvgEnd, 0, -2). sprintf(' WHERE carga_academica_id = %u', $carga_academica_id);
-
             // primero actualizamos los valores de los promedios pequeños
             DB::statement($rawQueryUpdateNote);
             // y luego actualizamos el promedio final
             DB::statement($rawQueryUpdateAvgEnd);
+
+            // verificando si exite promedio
+            $columPromedio = trim($collectioMateria->get('promedio'));
+            if(isset($columPromedio) && !empty($columPromedio)) {
+                $queryUpdateNote = "UPDATE notas SET estado_id = 1 where $columPromedio >= 6 and carga_academica_id = ? and estado_id = ?";
+                DB::update($queryUpdateNote, [$carga_academica_id, 3]);
+            }
         }
     }
 
@@ -201,7 +208,6 @@ class MateriasDocentesController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error($th->getMessage());
             return response()->json([
                 'message' => 'Error al actualizar las notas, pongase en contacto con el administrador del sistema.'
             ], 500);

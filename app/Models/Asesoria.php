@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Asesoria extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +36,7 @@ class Asesoria extends Model
 
     public function alumno(): BelongsTo
     {
-        return $this->belongsTo(Alumno::class);
+        return $this->belongsTo(Alumno::class, 'carnet');
     }
 
     public function ciclo(): BelongsTo
@@ -46,5 +47,9 @@ class Asesoria extends Model
     public function estado(): BelongsTo
     {
         return $this->belongsTo(Estado::class);
+    }
+
+    public function detalles() {
+        return $this->hasMany(AsesoriaDetalle::class);
     }
 }

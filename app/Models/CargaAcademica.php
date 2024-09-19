@@ -36,6 +36,12 @@ class CargaAcademica extends Model
         'ciclo_id' => 'integer',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function docente(): BelongsTo
     {
         return $this->belongsTo(Docente::class);

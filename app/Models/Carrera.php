@@ -35,4 +35,10 @@ class Carrera extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 }
