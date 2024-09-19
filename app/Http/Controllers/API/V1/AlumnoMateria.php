@@ -4,26 +4,40 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AlumnoMateriaResource;
 
 use App\Models\Nota;
+use App\Models\Ciclo;
 use App\Models\AlumnoNotaCargaAcademica as NotaView;
+use App\Traits\PensumTrait;
+use Illuminate\Http\Request;
 
 class AlumnoMateria extends Controller
 {
+    use PensumTrait;
+
     public function __construct()
     {
         $this->middleware('jwt.auth');
     }
 
-    public function getMaterias() {
+    public function getMaterias(Request $request) {
         $carnet = Auth::user()->persona->usertable->carnet;
-        $notas  = NotaView::where('carnet', $carnet)->with(['docente' => function($q) {
+        $query = NotaView::query();
+
+         $query->where('carnet', $carnet)->with(['docente' => function($q) {
             $q->select('id', 'nombres', 'apellidos');
         }, 'alumno'=> function($q) {
             $q->select('carnet', 'nombres', 'apellidos');
-        } ])->get();
+        } ]);
 
+        if($request->has('all') && strcmp($request->input('all'), '0') == 0) {
+            $ciclo = $this->getActiveCycle();
+            if($ciclo) {
+                $query->where('ciclo_id', $ciclo);
+            }
+        }
+
+        $notas  = $query->get();
         return response()->json([
             'materias' => $notas,
         ], 200);
