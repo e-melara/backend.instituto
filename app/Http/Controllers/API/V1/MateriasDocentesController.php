@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Models\Materia;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Nota;
+use App\Models\Materia;
+use App\Traits\PensumTrait;
 use App\Models\CargaAcademica;
+use App\Models\CargaAcademicaHistory;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Models\Alumno;
 
 class MateriasDocentesController extends Controller
 {
+    use PensumTrait;
     public function getMateriasDocentes(Request $request) {
         $docente = Auth::user()->persona->usertable;
+
         $cargas = CargaAcademica::where('docente_id', $docente->id)
             ->whereNull('deleted_at')
+            ->where('ciclo_id', $this->getActiveCycle())
             ->with(['materia' => function($q) {
                 $q->with(['carrera']);
             }, 'horario'])
@@ -171,12 +178,28 @@ class MateriasDocentesController extends Controller
         }
     }
 
+    private function saveHistoryNote(Request $request, $carga_id) {
+        $user = Auth::user();
+        $notes = $request->input('notes');
+        $keyNote = $request->input('key_note');
+
+        CargaAcademicaHistory::create([
+            'key_note' => $keyNote,
+            'user_created' => $user->id,
+            'carga_academica_id' => $carga_id,
+            'details' => $notes
+        ]);
+    }
+
     public function updateMateriasNotes(Request $request, $carga_academica_id)
     {
         $keyNote = $request->input('key_note');
         $notes = $request->input('notes');
         DB::beginTransaction();
         try {
+            // guardado el historial de las notas
+            $this->saveHistoryNote($request, $carga_academica_id);
+
             $notesCollect = collect($notes);
             $rawQueryCase = sprintf('UPDATE notas SET %s = CASE ',
                 $keyNote);
@@ -208,9 +231,52 @@ class MateriasDocentesController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::error($th->getMessage());
             return response()->json([
                 'message' => 'Error al actualizar las notas, pongase en contacto con el administrador del sistema.'
             ], 500);
         }
+    }
+
+    public function getMateriasNotesHistory(Request $request, $carga_id) {
+        $all = CargaAcademicaHistory::where('carga_academica_id', $carga_id)
+            ->select('id', 'created_at', 'key_note')
+            ->get();
+
+        return response()->json([
+            'history' => $all
+        ]);
+    }
+
+    private function getNameFileMateria($materia) {
+        $nameFile = $materia->codigo.'_'.$materia->nombre;
+        $nameFile = str_replace(' ', '_', $nameFile);
+        return sprintf('%s_%s.pdf', time(), strtoupper($nameFile));
+    }
+
+    public function downloadPDFHistory(Request $request, $carga_academica_history) {
+        $historial = CargaAcademicaHistory::find($carga_academica_history);
+        $carga_academica = $historial->carga_academica;
+
+        $collect = collect($historial->details);
+        $carnets = $collect->pluck('carnet');
+        $groupBy = $collect->groupBy('carnet');
+
+        $alumnos = Alumno::whereIn('carnet', $carnets)
+            ->select('carnet', 'nombres', 'apellidos')
+            ->get()
+            ->map(function($alumno) use ($groupBy) {
+                $nota = $groupBy->get($alumno->carnet);
+                return [
+                    'carnet' => $alumno->carnet,
+                    'nombres' => $alumno->nombres . ' '. $alumno->apellidos,
+                    'nota' => $nota[0]['valor']
+                ];
+            });
+
+        $pdf = PDF::loadView('pdf.carga_academica_history', compact('historial', 'carga_academica', 'alumnos'))
+            ->setPaper('letter', 'landscape');
+        
+        return $pdf->download($this->getNameFileMateria($carga_academica->materia));
     }
 }

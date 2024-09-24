@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Log;
 
 trait PensumTrait
 {
-    public const APROBADO = 'A';
-    public const CURSANDO = 'C';
-    public const PENDIENTE = 'P';
-    public const REQUISITOS = 'R';
-    public const REPROBADA = 'RR';
+    public $APROBADO = 'A';
+    public $CURSANDO = 'C';
+    public $PENDIENTE = 'P';
+    public $REQUISITOS = 'R';
+    public $REPROBADA = 'RR';
 
-    public const APROBADO_ID = 1;
-    public const CURSANDO_ID = 3;
+    public $APROBADO_ID = 1;
+    public $CURSANDO_ID = 3;
 
     public function checkTheSubjects($carnet, $pensum) {
         $_pensum = collect($pensum);
@@ -33,10 +33,10 @@ trait PensumTrait
             ->get()
             ->groupBy('estado_id')
             ->each(function($groupedSubjects, $key) use ($subjectsStatus) {
-                if($key === self::APROBADO_ID) {
+                if($key === $this->APROBADO_ID) {
                     $subjectsStatus['approved'] = $groupedSubjects->pluck('materia_id');
                     $subjectsStatus['countApproved'] = $groupedSubjects->count();
-                } else if($key === self::CURSANDO_ID) {
+                } else if($key === $this->CURSANDO_ID) {
                     $subjectsStatus['studying'] = $groupedSubjects->pluck('materia_id');
                     $subjectsStatus['countStudying'] = $groupedSubjects->count();
                 } else if($key === 2) {
@@ -47,24 +47,24 @@ trait PensumTrait
         Log::info('Subjects Status: ' . json_encode($subjectsStatus['studying']));
         $_pensum->each(function($item) use ($subjectsStatus) {
             if($subjectsStatus['countApproved'] > 0 && $subjectsStatus['approved']->contains($item->materia_id)) {
-                $item->estado = self::APROBADO;
+                $item->estado = $this->APROBADO;
             } else if($subjectsStatus['countStudying'] > 0 && $subjectsStatus['studying']->contains($item->materia_id)) {
-                $item->estado = self::CURSANDO;
+                $item->estado = $this->CURSANDO;
             } else {
                 if($item->prerrequisito == '0') {
-                    $item->estado = self::REQUISITOS;
+                    $item->estado = $this->REQUISITOS;
                 } else {
                     $arrayRequisitos = array_map('intval',explode(',', $item->prerrequisito));
                     $isApproved = collect($arrayRequisitos)->every(function($requisito) use ($subjectsStatus) {
                         return $subjectsStatus['approved']->contains($requisito);
                     });
                     if($isApproved) {
-                        $item->estado = self::REQUISITOS;
+                        $item->estado = $this->REQUISITOS;
                     } else {
                         if(@isset($subjectsStatus['failed']) && $subjectsStatus['failed']->contains($item->materia_id)) {
-                            $item->estado = self::REPROBADA;
+                            $item->estado = $this->REPROBADA;
                         } else {
-                            $item->estado = self::PENDIENTE;
+                            $item->estado = $this->PENDIENTE;
                         }
                     }
                 }
@@ -75,7 +75,7 @@ trait PensumTrait
 
     public function getPossibleAcademicLoads($pensum = array()) {
         $activeCycle = $this->getActiveCycle();
-        $subjectsIds = collect($pensum)->where('estado', self::REQUISITOS)->pluck('materia_id')->all();
+        $subjectsIds = collect($pensum)->where('estado', $this->REQUISITOS)->pluck('materia_id')->all();
         $academicLoads = CargaAcademica::whereIn('materia_id', $subjectsIds)
             ->with(['materia', 'docente'])
             ->where('ciclo_id', $activeCycle)
