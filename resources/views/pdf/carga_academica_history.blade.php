@@ -1,6 +1,13 @@
 @extends('pdf.layout')
 
 @section('content')
+<h1 class="text-center title">
+  INSTITUTO TECNOLÓGICO <br> "ESCUELA TÉCNICA PARA LA SALUD"
+</h1>
+<h2 class="text-center title">
+  {{ $carga_academica->materia->carrera->nombre }} - CICLO {{ $carga_academica->ciclo->nombre }}
+</h2>
+<br>
 <h1 class="text-center title">Materia: {{ $carga_academica->materia->nombre }}</h1>
 <h2 class="text-center title"> Docente: 
   {{ $carga_academica->docente->nombres }}
@@ -30,4 +37,11 @@
     @endforeach
   </tbody>
 </table>
+
+<div style='margin-top: 100px'>
+  <h4 class='text-center'>
+    ________________________________________ <br>
+    FIRMA Y SELLO DE DOCENTE
+  </h4>
+</div>
 @endsection

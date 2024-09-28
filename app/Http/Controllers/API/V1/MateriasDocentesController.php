@@ -181,7 +181,7 @@ class MateriasDocentesController extends Controller
     private function saveHistoryNote(Request $request, $carga_id) {
         $user = Auth::user();
         $notes = $request->input('notes');
-        $keyNote = $request->input('key_note');
+        $keyNote = $request->input('name_note');
 
         CargaAcademicaHistory::create([
             'key_note' => $keyNote,
@@ -275,7 +275,7 @@ class MateriasDocentesController extends Controller
             });
 
         $pdf = PDF::loadView('pdf.carga_academica_history', compact('historial', 'carga_academica', 'alumnos'))
-            ->setPaper('letter', 'landscape');
+            ->setPaper('letter', 'portrait');
         
         return $pdf->download($this->getNameFileMateria($carga_academica->materia));
     }

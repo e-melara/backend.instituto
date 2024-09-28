@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Historial de notas</title>
   <style>
-    @page { margin: 100px 25px; }
+    @page { margin: 40px 20px; }
     body { counter-increment: pageplus1, page; counter-reset: pageplus1 1; }
     body {
       margin: 0px;
@@ -29,7 +29,6 @@
     h2.title {
       font-size: 22px;
       font-weight: normal;
-      font-style: italic;
     }
 
     table.table-note {
