@@ -2,8 +2,10 @@
 
 namespace App\Traits;
 
-use App\Models\CargaAcademica;
 use App\Models\Ciclo;
+use App\Models\Asesoria;
+use App\Models\CargaAcademica;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -17,6 +19,20 @@ trait PensumTrait
 
     public $APROBADO_ID = 1;
     public $CURSANDO_ID = 3;
+
+    public function checkAsesoria($pensum, $carnet) {
+        $materiasCursando = $pensum->where('estado', $this->CURSANDO)->count();
+        if($materiasCursando > 0) {
+            return false;
+        }
+
+        $asesoriaActiva = Asesoria::where(function($query) use($carnet) {
+            $query->where('carnet', $carnet)
+                ->where('ciclo_id', self::getActiveCycle());
+        })->count();
+
+        return $asesoriaActiva == 0;
+    }
 
     public function checkTheSubjects($carnet, $pensum) {
         $_pensum = collect($pensum);
@@ -44,7 +60,6 @@ trait PensumTrait
                 }
             });
 
-        Log::info('Subjects Status: ' . json_encode($subjectsStatus['studying']));
         $_pensum->each(function($item) use ($subjectsStatus) {
             if($subjectsStatus['countApproved'] > 0 && $subjectsStatus['approved']->contains($item->materia_id)) {
                 $item->estado = $this->APROBADO;
