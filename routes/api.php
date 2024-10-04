@@ -58,7 +58,9 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('/docentes', 'getMateriasDocentes');
             Route::get('/{id_carga}/carga', 'getAlumnosCargasAcademica');
             Route::get('/{carga_academica_id}', 'getMateriasNotes');
+            Route::get('/{carga_academica_id}/history', 'getMateriasNotesHistory');
             Route::put('/{carga_academica_id}/carga', 'updateMateriasNotes');
+            Route::get('/{carga_academica_history}/download', 'downloadPDFHistory');
         });
     });
 });

@@ -46,13 +46,17 @@ class AlumnoController extends Controller
             $pensum = $alumno->pensum->last()->pensumDetalles->load('materia');
             $collectionSubjects = self::checkTheSubjects($carnet, $pensum);
 
-            $activeAdvice = Asesoria::where('carnet', $carnet)->with(['estado'])->first();
-            // cargas academicas posibles a llevar
-            $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects);
+            $academicLoads = [];
+            $activeAdvice = $this->checkAsesoria($collectionSubjects, $carnet);
+            if($activeAdvice) {
+                $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects);
+            }
+
+            Log::info($carnet);
 
             $responseToTheRequest = [
                 'carrera' => $carrera,
-                'activeAdvice' => isset($activeAdvice),
+                'activeAdvice' => $activeAdvice,
                 'academicLoads' => new AcademicLoadsCollection(collect($academicLoads)),
                 'pensum' => new EnrollmentPlanCollection(collect($collectionSubjects))
             ];

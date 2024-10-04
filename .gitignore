@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 # /storage/logs/*.log
-/storage/certs/*.pem
+/storage/*
 /vendor
 .env
 .env.backup

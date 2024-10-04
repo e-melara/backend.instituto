@@ -61,4 +61,9 @@ class CargaAcademica extends Model
     {
         return $this->belongsTo(Ciclo::class);
     }
+
+    public function carga_academica_history()
+    {
+        return $this->hasMany(CargaAcademicaHistory::class);
+    }
 }
