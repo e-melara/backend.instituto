@@ -25,6 +25,7 @@ class Materia extends Model
     protected $fillable = [
         'nombre',
         'codigo',
+        'is_egreso',
     ];
 
     /**

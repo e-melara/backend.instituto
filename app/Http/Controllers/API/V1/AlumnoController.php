@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Nota;
 use App\Models\Alumno;
-use App\Models\Asesoria;
 use App\Traits\PensumTrait;
-use App\Models\AsesoriaDetalle;
 use App\Models\CargaAcademica;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AcademicLoadsCollection;
 use App\Http\Resources\EnrollmentPlanCollection;
+use App\Models\Materia;
 
 class AlumnoController extends Controller
 {
@@ -23,6 +22,31 @@ class AlumnoController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth');
+    }
+
+    public function egreso() {
+        $carnet = Auth::user()->persona->usertable->carnet;
+        $responseToTheRequest = Nota::where('carnet', $carnet)
+            ->whereHas('cargaAcademica', function($query) {
+                $query->whereHas('materia', function($query) {
+                    $query->where('is_egresado', true);
+                });
+            })
+            ->with([
+                'cargaAcademica' => function($q) {
+                    $q->select('id', 'materia_id');
+                    $q->with(['materia' => function($q) {
+                        $q->select('id', 'nombre', 'codigo');
+                    }]);
+                }, 
+                'estado' => function($q) {
+                    $q->select('id', 'nombre');
+                }
+            ])
+            ->select('carga_academica_id', 'estado_id', 'nota_1', 'nota_2', 'nota_3', 'nota_4', 'carnet')
+            ->get();
+
+        return self::response_http($responseToTheRequest);
     }
 
     /**
@@ -51,8 +75,6 @@ class AlumnoController extends Controller
             if($activeAdvice) {
                 $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects);
             }
-
-            Log::info($carnet);
 
             $responseToTheRequest = [
                 'carrera' => $carrera,

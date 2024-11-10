@@ -28,7 +28,7 @@ trait PensumTrait
 
         $asesoriaActiva = Asesoria::where(function($query) use($carnet) {
             $query->where('carnet', $carnet)
-                ->where('ciclo_id', self::getActiveCycle());
+                ->where('ciclo_id', $this->getActiveCycle());
         })->count();
 
         return $asesoriaActiva == 0;
