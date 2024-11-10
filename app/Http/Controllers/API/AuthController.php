@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
@@ -24,12 +25,12 @@ class AuthController extends Controller
         try {
             $credentials = request(['email', 'password']);
             $token = JWTAuth::attempt($credentials);
-
             if (!$token) {
                 throw new \Exception('Credenciales no validas');
             }
             return response()->json(compact('token'));
         } catch (\Throwable $th) {
+            Log::info($th->getMessage());
             return response()->json([
                 'message' => 'Credenciales no validas',
             ], 401);

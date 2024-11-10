@@ -41,6 +41,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'alumno'], function () {
         Route::controller(AlumnoController::class)->group(function () {
             Route::get('{id}/pensum', 'pensum');
+            Route::get('egreso', 'egreso');
         });
         Route::controller(AlumnoMateria::class)->group(function () {
             Route::get('materias', 'getMaterias');
