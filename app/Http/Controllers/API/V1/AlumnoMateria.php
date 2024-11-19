@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 use App\Models\Nota;
-use App\Models\Ciclo;
 use App\Models\AlumnoNotaCargaAcademica as NotaView;
 use App\Traits\PensumTrait;
 use Illuminate\Http\Request;
@@ -24,7 +23,9 @@ class AlumnoMateria extends Controller
         $carnet = Auth::user()->persona->usertable->carnet;
         $query = NotaView::query();
 
-         $query->where('carnet', $carnet)->with(['docente' => function($q) {
+        $query->where('carnet', $carnet)
+        ->whereNull('is_egresado')
+        ->with(['docente' => function($q) {
             $q->select('id', 'nombres', 'apellidos');
         }, 'alumno'=> function($q) {
             $q->select('carnet', 'nombres', 'apellidos');
