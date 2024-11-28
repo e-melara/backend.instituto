@@ -94,6 +94,7 @@ trait PensumTrait
         $academicLoads = CargaAcademica::whereIn('materia_id', $subjectsIds)
             ->with(['materia', 'docente'])
             ->where('ciclo_id', $activeCycle)
+            ->orderBy('materia_id', 'desc')
             ->get();
 
         return $academicLoads;
