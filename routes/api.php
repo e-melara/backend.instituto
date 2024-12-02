@@ -52,6 +52,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::controller(PensumController::class)->group(function() {
             Route::post('/', 'store');
             Route::get('/asesorias', 'getAsesoriaFilter');
+            Route::post('/enrolled', 'enrolled');
         });
     });
     Route::group(['prefix' => 'materias'], function() {

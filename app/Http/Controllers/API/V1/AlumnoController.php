@@ -38,7 +38,7 @@ class AlumnoController extends Controller
                     $q->with(['materia' => function($q) {
                         $q->select('id', 'nombre', 'codigo');
                     }]);
-                }, 
+                },
                 'estado' => function($q) {
                     $q->select('id', 'nombre');
                 }
@@ -72,7 +72,7 @@ class AlumnoController extends Controller
 
             $academicLoads = [];
             $activeAdvice = $this->checkAsesoria($collectionSubjects, $carnet);
-            if($activeAdvice) {
+            if($activeAdvice['status'] === 'STUDENT_CAN_ENROLL') {
                 $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects);
             }
 

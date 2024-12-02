@@ -6,6 +6,7 @@ use App\Models\Ciclo;
 use App\Models\Asesoria;
 use App\Models\CargaAcademica;
 
+use App\Models\VCargaAcademicaMateria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -20,18 +21,28 @@ trait PensumTrait
     public $APROBADO_ID = 1;
     public $CURSANDO_ID = 3;
 
-    public function checkAsesoria($pensum, $carnet) {
+    public function checkAsesoria($pensum, $carnet) : array
+    {
         $materiasCursando = $pensum->where('estado', $this->CURSANDO)->count();
         if($materiasCursando > 0) {
-            return false;
+            return [
+                'status' => 'STUDENT_IS_STUDYING'
+            ];
         }
 
         $asesoriaActiva = Asesoria::where(function($query) use($carnet) {
-            $query->where('carnet', $carnet)
-                ->where('ciclo_id', $this->getActiveCycle());
-        })->count();
+            $query->where('carnet', $carnet)->where('ciclo_id', $this->getActiveCycle());
+        })->first();
+        $haveNotToActiveEnrolled = !is_null($asesoriaActiva);
 
-        return $asesoriaActiva == 0;
+        return [
+            "enrolled" => $haveNotToActiveEnrolled ?
+                VCargaAcademicaMateria::whereIn('id', $asesoriaActiva->detalles->pluck('carga_academica_id'))
+                    ->select('nombre_materia', 'nombres_docente', 'materia_id', 'codigo_materia', 'apellidos_docente', 'id')
+                    ->get() :
+                [],
+            'status' => $haveNotToActiveEnrolled ? 'STUDENT_HAS_TO_ACTIVE_ENROLLED' : 'STUDENT_CAN_ENROLL'
+        ];
     }
 
     public function checkTheSubjects($carnet, $pensum) {

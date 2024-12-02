@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+use App\Models\VCargaAcademicaMateria;
 
 class Asesoria extends Model
 {
     use HasFactory, SoftDeletes;
+
+    const ASESORIA_ESTADO_ENVIADA = '007';
+    const ASESORIA_ESTADO_EN_ACADEMICA = '008';
+    const ASESORIA_ESTADO_EN_PAGADURIA = '009';
+    const ASESORIA_ESTADO_APROBADA = '001';
+    const ASESORIA_ESTADO_RECHAZADA = '004';
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +40,12 @@ class Asesoria extends Model
         'carnet' => 'string',
         'ciclo_id' => 'integer',
         'estado_id' => 'integer',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function alumno(): BelongsTo

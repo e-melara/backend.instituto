@@ -1,0 +1,12 @@
+create definer = root@localhost view v_carga_academica_materia as
+select `c`.`id`         AS `id`,
+       `c`.`docente_id` AS `docente_id`,
+       `c`.`materia_id` AS `materia_id`,
+       `c`.`ciclo_id`   AS `ciclo_id`,
+       `c`.`horario_id` AS `horario_id`,
+       `m`.`nombre`     AS `nombre_materia`,
+       `m`.`codigo`     AS `codigo_materia`,
+       `d`.`nombres`    AS `nombres_docente`,
+       `d`.`apellidos`  AS `apellidos_docente`
+from ((`instituto`.`carga_academicas` `c` join `instituto`.`materias` `m`
+       on ((`c`.`materia_id` = `m`.`id`))) join `instituto`.`docentes` `d` on ((`d`.`id` = `c`.`docente_id`)));
