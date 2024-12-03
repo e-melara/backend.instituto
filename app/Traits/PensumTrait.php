@@ -38,10 +38,15 @@ trait PensumTrait
         return [
             "enrolled" => $haveNotToActiveEnrolled ?
                 VCargaAcademicaMateria::whereIn('id', $asesoriaActiva->detalles->pluck('carga_academica_id'))
-                    ->select('nombre_materia', 'nombres_docente', 'materia_id', 'codigo_materia', 'apellidos_docente', 'id')
+                    ->select(
+                        'nombre_materia as subject_name',
+                        'codigo_materia as subject_code',
+                        DB::raw('CONCAT(nombres_docente, " ", apellidos_docente) as teacher_names'),
+                    )
                     ->get() :
                 [],
-            'status' => $haveNotToActiveEnrolled ? 'STUDENT_HAS_TO_ACTIVE_ENROLLED' : 'STUDENT_CAN_ENROLL'
+            'status' => $haveNotToActiveEnrolled ? 'STUDENT_HAS_TO_ACTIVE_ENROLLED' : 'STUDENT_CAN_ENROLL',
+            'text'   => $haveNotToActiveEnrolled ? 'VER ASESORIA' : 'INICIAR ASESORIA',
         ];
     }
 

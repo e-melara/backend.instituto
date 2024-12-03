@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\AlumnoNotaCargaAcademica;
+use App\Models\Nota;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,6 +15,7 @@ use App\Models\Asesoria;
 use App\Traits\PensumTrait;
 use App\Models\AsesoriaDetalle;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PensumController extends Controller
 {
@@ -90,6 +93,21 @@ class PensumController extends Controller
         $carnet = Auth::user()->persona->usertable->carnet;
 
         try {
+            $notas = AlumnoNotaCargaAcademica::where(function($query) use ($carnet, $cicloActivo) {
+                $query->where('carnet', $carnet)
+                    ->where('ciclo_id', $cicloActivo)
+                    ->whereNotNull('deleted_at');
+            })->count();
+
+            if($notas > 0) {
+                return $this->response_error([], 'El alumno ya posee materias registradas en el ciclo activo.', 503);
+            }
+
+            $asesorias = Asesoria::where('carnet', $carnet)->first();
+            if($asesorias) {
+                return $this->response_error([], 'El alumno ya posee una asesoria registrada en el ciclo activo.', 503);
+            }
+
             DB::beginTransaction();
             $asesoria = Asesoria::create([
                 'carnet' => $carnet,
@@ -105,10 +123,10 @@ class PensumController extends Controller
             });
             $asesoria->detalles()->createMany($idsCollections->toArray());
             DB::commit();
-            return $this->response_http([],'Asesoria creada con exito', 200);
+            return $this->response_http([],'¡Proceso completado con éxito! La asesoría ha sido creada y se ha enviado para revisión administrativa.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $this->response_error([$th->getMessage()], 'Error al crear la asesoria', 503);
+            return $this->response_error([$th->getMessage()], 'El servidor está experimentando dificultades. Por favor, comunícate con el administrador para obtener asistencia.', 503);
         }
     }
 }
