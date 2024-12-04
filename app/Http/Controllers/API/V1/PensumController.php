@@ -148,6 +148,7 @@ class PensumController extends Controller
                         'estado_id' => 3,
                         'carnet' => $carnet,
                         'matricula_id' => 1,
+                        'deleted_at' => null,
                         'carga_academica_id' => $detalle->carga_academica_id,
                     ];
                 });

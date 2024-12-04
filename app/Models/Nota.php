@@ -19,6 +19,7 @@ class Nota extends Model
         'carnet',
         'estado_id',
         'carga_academica_id',
+        'deleted_at',
     ];
 
     /**
