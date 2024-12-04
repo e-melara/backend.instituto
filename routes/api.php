@@ -7,6 +7,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\V1\AlumnoMateria;
 use App\Http\Controllers\API\V1\AlumnoController;
 use App\Http\Controllers\API\V1\PensumController;
+use App\Http\Controllers\API\V1\AsesoriaController;
 use App\Http\Controllers\API\V1\RefreshTokenController;
 use App\Http\Controllers\API\V1\MateriasDocentesController;
 
@@ -52,6 +53,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::controller(PensumController::class)->group(function() {
             Route::post('/', 'store');
             Route::get('/asesorias', 'getAsesoriaFilter');
+            Route::put('/asesorias/{id}', 'updateAsesoria');
             Route::post('/enrolled', 'enrolled');
         });
     });
@@ -63,6 +65,11 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('/{carga_academica_id}/history', 'getMateriasNotesHistory');
             Route::put('/{carga_academica_id}/carga', 'updateMateriasNotes');
             Route::get('/{carga_academica_history}/download', 'downloadPDFHistory');
+        });
+    });
+    Route::group(['prefix' => 'asesorias'], function() {
+        Route::controller(AsesoriaController::class)->group(function() {
+            Route::get('list', 'getList');
         });
     });
 });

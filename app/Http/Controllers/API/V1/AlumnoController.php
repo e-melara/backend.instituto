@@ -83,6 +83,10 @@ class AlumnoController extends Controller
                 'pensum' => new EnrollmentPlanCollection(collect($collectionSubjects))
             ];
 
+            if(strcmp($carnet, 'me') != 0){
+                $responseToTheRequest['student'] = $alumno->only(['carnet', 'nombres', 'apellidos']);
+            }
+
             return self::response_http($responseToTheRequest);
         } catch (\Throwable $th) {
             return response()->json([

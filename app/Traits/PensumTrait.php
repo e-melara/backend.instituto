@@ -31,7 +31,9 @@ trait PensumTrait
         }
 
         $asesoriaActiva = Asesoria::where(function($query) use($carnet) {
-            $query->where('carnet', $carnet)->where('ciclo_id', $this->getActiveCycle());
+            $query->where('carnet', $carnet)
+                ->where('ciclo_id', $this->getActiveCycle())
+                ->where('estado_id', '<>', 4);
         })->first();
         $haveNotToActiveEnrolled = !is_null($asesoriaActiva);
 
@@ -47,6 +49,7 @@ trait PensumTrait
                 [],
             'status' => $haveNotToActiveEnrolled ? 'STUDENT_HAS_TO_ACTIVE_ENROLLED' : 'STUDENT_CAN_ENROLL',
             'text'   => $haveNotToActiveEnrolled ? 'VER ASESORIA' : 'INICIAR ASESORIA',
+            'estado' => $haveNotToActiveEnrolled ? $asesoriaActiva->estado_id : 0
         ];
     }
 

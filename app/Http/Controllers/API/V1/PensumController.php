@@ -129,4 +129,46 @@ class PensumController extends Controller
             return $this->response_error([$th->getMessage()], 'El servidor está experimentando dificultades. Por favor, comunícate con el administrador para obtener asistencia.', 503);
         }
     }
+
+    public function updateAsesoria (Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $estado = Estado::where('codigo', $request->input('status'))->first();
+            Asesoria::where('id', $id)->update([
+                'estado_id' => $estado->id,
+            ]);
+
+            if($estado->codigo == Estado::FINALIZADA) {
+                $asesoria = Asesoria::where('id', $id)->with(['detalles'])->first();
+                $carnet = $asesoria->carnet;
+
+                $cargasAcademicas = $asesoria->detalles->map(function($detalle) use ($carnet) {
+                    return [
+                        'estado_id' => 3,
+                        'carnet' => $carnet,
+                        'matricula_id' => 1,
+                        'carga_academica_id' => $detalle->carga_academica_id,
+                    ];
+                });
+
+                DB::table('notas')->insert($cargasAcademicas->toArray());
+                DB::commit();
+                return response()->json([
+                    'message' => 'Operación exitosa: La aceptacion de la asesoría se ha procesado sin inconvenientes'
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Operación exitosa: La aceptacion de la asesoría se ha procesado sin inconvenientes'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            return response()->json([
+                'message' => 'Tenemos problemas con el servidor, intente mas tarde'
+            ], 503);
+        }
+    }
 }
