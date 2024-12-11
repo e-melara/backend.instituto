@@ -18,6 +18,7 @@ class AcademicLoadsCollection extends ResourceCollection
             return [
                 'id' => $collection->id,
                 'ciclo' => $collection->ciclo_id,
+                'horario' => $collection->horario_id,
                 'teacher_names' => $collection->docente->nombres,
                 'teacher_lasts' => $collection->docente->apellidos,
                 'subject_name' => $collection->materia->nombre,

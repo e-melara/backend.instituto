@@ -73,8 +73,9 @@ class AlumnoController extends Controller
             $academicLoads = [];
             $activeAdvice = $this->checkAsesoria($collectionSubjects, $carnet);
             if($activeAdvice['status'] === 'STUDENT_CAN_ENROLL') {
-                $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects);
+                $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects, $alumno->seccion);
             }
+
 
             $responseToTheRequest = [
                 'carrera' => $carrera,

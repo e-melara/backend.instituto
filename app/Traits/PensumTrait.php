@@ -48,7 +48,7 @@ trait PensumTrait
                     ->get() :
                 [],
             'status' => $haveNotToActiveEnrolled ? 'STUDENT_HAS_TO_ACTIVE_ENROLLED' : 'STUDENT_CAN_ENROLL',
-            'text'   => $haveNotToActiveEnrolled ? 'VER ASESORIA' : 'INICIAR ASESORIA',
+            'text'   => $haveNotToActiveEnrolled ? 'VER INSCRIPCIÓN' : 'INICIAR INSCRIPCIÓN',
             'estado' => $haveNotToActiveEnrolled ? $asesoriaActiva->estado_id : 0
         ];
     }
@@ -107,12 +107,14 @@ trait PensumTrait
         return $_pensum;
     }
 
-    public function getPossibleAcademicLoads($pensum = array()) {
+    public function getPossibleAcademicLoads($pensum = array(), $seccion) {
         $activeCycle = $this->getActiveCycle();
+        $horarioId = strcmp($seccion, 'A') === 0 ? 1 : 2;
         $subjectsIds = collect($pensum)->where('estado', $this->REQUISITOS)->pluck('materia_id')->all();
         $academicLoads = CargaAcademica::whereIn('materia_id', $subjectsIds)
             ->with(['materia', 'docente'])
             ->where('ciclo_id', $activeCycle)
+            ->where('horario_id', $horarioId)
             ->orderBy('materia_id', 'desc')
             ->get();
 
@@ -120,7 +122,7 @@ trait PensumTrait
     }
 
     public function getActiveCycle() {
-        $cycle = Ciclo::where('estado', 'A')->first();
+        $cycle = Ciclo::where('estado', 'A')->orderBy('created_at', 'desc')->first();
         if($cycle) {
             return $cycle->id;
         }
