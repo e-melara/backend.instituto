@@ -76,7 +76,6 @@ class AlumnoController extends Controller
                 $academicLoads = $this->getPossibleAcademicLoads($collectionSubjects, $alumno->seccion);
             }
 
-
             $responseToTheRequest = [
                 'carrera' => $carrera,
                 'activeAdvice' => $activeAdvice,

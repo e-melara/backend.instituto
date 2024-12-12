@@ -30,6 +30,13 @@ trait PensumTrait
             ];
         }
 
+        $subjectsFailds = $pensum->where('estado', $this->REPROBADA)->count();
+        if($subjectsFailds > 0) {
+            return [
+                'status' => 'STUDENT_HAVE_SUBJECTS_FAILED'
+            ];
+        }
+
         $asesoriaActiva = Asesoria::where(function($query) use($carnet) {
             $query->where('carnet', $carnet)
                 ->where('ciclo_id', $this->getActiveCycle())
@@ -58,6 +65,7 @@ trait PensumTrait
         $subjectsStatus = collect([
             'approved' => collect(),
             'studying' => collect(),
+            'failed' => collect(),
             'countApproved' => 0,
             'countStudying' => 0
         ]);
@@ -80,30 +88,32 @@ trait PensumTrait
             });
 
         $_pensum->each(function($item) use ($subjectsStatus) {
-            if($subjectsStatus['countApproved'] > 0 && $subjectsStatus['approved']->contains($item->materia_id)) {
+            if($subjectsStatus['approved'] && $subjectsStatus['approved']->contains($item->materia_id)) {
                 $item->estado = $this->APROBADO;
-            } else if($subjectsStatus['countStudying'] > 0 && $subjectsStatus['studying']->contains($item->materia_id)) {
+            } else if($subjectsStatus['studying'] && $subjectsStatus['studying']->contains($item->materia_id)) {
                 $item->estado = $this->CURSANDO;
+            } else if($subjectsStatus['failed'] && $subjectsStatus['failed']->contains($item->materia_id)) {
+                $item->estado = $this->REPROBADA;
+            } else if($item->prerrequisito == '0') {
+                $item->estado = $this->REQUISITOS;
             } else {
-                if($item->prerrequisito == '0') {
-                    $item->estado = $this->REQUISITOS;
-                } else {
-                    $arrayRequisitos = array_map('intval',explode(',', $item->prerrequisito));
-                    $isApproved = collect($arrayRequisitos)->every(function($requisito) use ($subjectsStatus) {
-                        return $subjectsStatus['approved']->contains($requisito);
-                    });
-                    if($isApproved) {
-                        $item->estado = $this->REQUISITOS;
-                    } else {
-                        if(@isset($subjectsStatus['failed']) && $subjectsStatus['failed']->contains($item->materia_id)) {
-                            $item->estado = $this->REPROBADA;
-                        } else {
-                            $item->estado = $this->PENDIENTE;
-                        }
-                    }
-                }
+                $item->estado = $this->PENDIENTE;
             }
         });
+
+        $orderSubjectsApproved = $_pensum->where('estado', $this->APROBADO)->values()->pluck('no_orden');
+        foreach ($_pensum as $value) {
+            if($value->estado === $this->PENDIENTE) {
+                $preRequisites = array_map('intval', explode(',', $value->prerrequisito));
+                $isValidSubjectEnrolled = collect($preRequisites)->every(function($preRequisite) use ($orderSubjectsApproved) {
+                    return $orderSubjectsApproved->contains($preRequisite);
+                });
+                if($isValidSubjectEnrolled) {
+                    $value->estado = $this->REQUISITOS;
+                }
+            }
+        }
+
         return $_pensum;
     }
 

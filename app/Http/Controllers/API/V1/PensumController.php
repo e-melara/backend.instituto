@@ -153,6 +153,8 @@ class PensumController extends Controller
                     ];
                 });
 
+                $asesoria->estado_id = 1;
+                $asesoria->save();
                 DB::table('notas')->insert($cargasAcademicas->toArray());
                 DB::commit();
                 return response()->json([
