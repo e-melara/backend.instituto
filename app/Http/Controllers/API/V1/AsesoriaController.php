@@ -25,7 +25,7 @@ class AsesoriaController extends Controller
         });
 
         $query->with(['alumno' => function($query) {
-            $query->select('carnet', 'nombres', 'apellidos');
+            $query->select('carnet', 'nombres', 'apellidos', 'seccion', 'idnivel');
             $query->with(['pensum' => function($query) {
                 $query->with(['carrera' => function($query) {
                     $query->select('id', 'nombre');

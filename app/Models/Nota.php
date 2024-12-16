@@ -36,7 +36,8 @@ class Nota extends Model
 
     public function alumno(): BelongsTo
     {
-        return $this->belongsTo(Alumno::class, 'carnet');
+        return $this->belongsTo(Alumno::class, 'carnet')
+            ->orderBy('carnet');
     }
 
     public function cargaAcademica(): BelongsTo

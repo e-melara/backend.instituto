@@ -41,6 +41,7 @@ class MateriasDocentesController extends Controller
             ->with(['alumno' => function($query) {
                 $query->select('apellidos', 'carnet', 'nombres');
             }, 'estado'])
+            ->orderBy('carnet')
             ->get();
 
         return response()->json([
@@ -276,7 +277,7 @@ class MateriasDocentesController extends Controller
 
         $pdf = PDF::loadView('pdf.carga_academica_history', compact('historial', 'carga_academica', 'alumnos'))
             ->setPaper('letter', 'portrait');
-        
+
         return $pdf->download($this->getNameFileMateria($carga_academica->materia));
     }
 }

@@ -156,6 +156,16 @@ class PensumController extends Controller
                 $asesoria->estado_id = 1;
                 $asesoria->save();
                 DB::table('notas')->insert($cargasAcademicas->toArray());
+                DB::table('cuotas')->insert([
+                    'carnet' => $carnet,
+                    'ciclolectivo' => $asesoria->ciclo_id,
+                    'cuota1' => 'PENDIENTE',
+                    'cuota2' => 'PENDIENTE',
+                    'cuota3' => 'PENDIENTE',
+                    'cuota4' => 'PENDIENTE',
+                    'cuota5' => 'PENDIENTE',
+                    'cuota6' => 'PENDIENTE',
+                ]);
                 DB::commit();
                 return response()->json([
                     'message' => 'Operación exitosa: La aceptacion de la asesoría se ha procesado sin inconvenientes'

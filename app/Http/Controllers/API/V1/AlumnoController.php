@@ -84,7 +84,7 @@ class AlumnoController extends Controller
             ];
 
             if(strcmp($carnet, 'me') != 0){
-                $responseToTheRequest['student'] = $alumno->only(['carnet', 'nombres', 'apellidos']);
+                $responseToTheRequest['student'] = $alumno->only(['carnet', 'nombres', 'apellidos', 'seccion', 'idnivel']);
             }
 
             return self::response_http($responseToTheRequest);

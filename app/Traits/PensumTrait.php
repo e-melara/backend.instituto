@@ -122,7 +122,7 @@ trait PensumTrait
         $horarioId = strcmp($seccion, 'A') === 0 ? 1 : 2;
         $subjectsIds = collect($pensum)->where('estado', $this->REQUISITOS)->pluck('materia_id')->all();
         $academicLoads = CargaAcademica::whereIn('materia_id', $subjectsIds)
-            ->with(['materia', 'docente'])
+            ->with(['materia', 'docente', 'horario'])
             ->where('ciclo_id', $activeCycle)
             ->where('horario_id', $horarioId)
             ->orderBy('materia_id', 'desc')
