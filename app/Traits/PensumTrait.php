@@ -48,6 +48,7 @@ trait PensumTrait
             "enrolled" => $haveNotToActiveEnrolled ?
                 VCargaAcademicaMateria::whereIn('id', $asesoriaActiva->detalles->pluck('carga_academica_id'))
                     ->select(
+                        DB::raw('case when horario_id = 1 then "A" when horario_id = 2 then "B" else "C" end as horario'),
                         'nombre_materia as subject_name',
                         'codigo_materia as subject_code',
                         DB::raw('CONCAT(nombres_docente, " ", apellidos_docente) as teacher_names'),
